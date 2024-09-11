@@ -1,23 +1,37 @@
-﻿namespace ShoppingProject.Services;
+﻿using ShoppingProject.Models;
+using System.Diagnostics;
+
+namespace ShoppingProject.Services;
 
 internal class ProductService
 {
+    private List<Product> products = [];
     internal void AddOrUpdateProduct()
     {
 
     }
 
-    internal void GetAllProducts()
+    internal IEnumerable<Product> GetAllProducts()
+    {
+        try
+        {
+            return products;
+        }
+        catch (Exception ex)
+        {
+            Debug.Write(ex.Message);
+        }
+        return null!;
+
+
+    }
+
+    internal void DeleteProductById(string id)
     {
 
     }
 
-    internal void DeleteProductById()
-    {
-
-    }
-
-    internal void DeleteProductsByCategoryId()
+    internal void DeleteProductsByCategoryId(string categoryId)
     {
 
     }
