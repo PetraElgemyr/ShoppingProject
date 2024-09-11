@@ -17,9 +17,7 @@ internal class MainMenu
         Console.WriteLine("0. Exit application");
 
         Console.WriteLine("Enter an option: ");
-
         HandleMainMenuOption(Console.ReadLine() ?? "");
-
     }
 
     public void HandleMainMenuOption(string option)

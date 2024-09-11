@@ -18,6 +18,7 @@ internal class CategoryMenu
         Console.WriteLine("0. Exit application");
 
         Console.WriteLine("Enter an option: ");
+        //Console.ReadLine() ?? ""
     }
 
     public void HandleCategoryMenuOption(string option)

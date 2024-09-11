@@ -24,8 +24,8 @@ internal class CategoryService
 
     }
 
-    internal void DeleteCategoryByIdAndAllConnectedProducts()
+    internal void DeleteCategoryById()
     {
-
+        //Note! Deletes all products with the choosen categoryId too
     }
 }
