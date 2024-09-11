@@ -26,8 +26,10 @@ internal class ProductMenu
     {
         //Product newProductRequest = new(); gör till request modell eller onödigt?
 
+    }
 
-
+    internal void EditProductById()
+    {
 
     }
 
@@ -45,7 +47,7 @@ internal class ProductMenu
                 Console.WriteLine($"Name: {product.Name}");
                 Console.WriteLine($"Description: {product.Description ?? "No description"}");
                 Console.WriteLine($"Price: {product.Price}");
-                
+
                 //Kan kolla kategorin med categoryId och hämta, samt skriva ut category name då om orkar
                 Console.WriteLine($"Category Id: {product.CategoryId ?? "No selected category"}");
 

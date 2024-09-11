@@ -74,9 +74,9 @@ internal class CategoryMenu
         Console.WriteLine("Enter the id for the category to edit");
         string selectedId = Console.ReadLine() ?? "";
 
-        if(selectedId != null && selectedId.Length > 0)
+        if (selectedId != null && selectedId.Length > 0)
         {
-           
+
         }
     }
 }

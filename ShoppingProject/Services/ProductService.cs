@@ -6,7 +6,7 @@ namespace ShoppingProject.Services;
 internal class ProductService
 {
     private List<Product> products = [];
-    internal void AddOrUpdateProduct()
+    internal void AddOrUpdateProduct(Product productRequest)
     {
 
     }
@@ -22,8 +22,6 @@ internal class ProductService
             Debug.Write(ex.Message);
         }
         return null!;
-
-
     }
 
     internal void DeleteProductById(string id)

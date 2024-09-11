@@ -10,21 +10,21 @@ internal class CategoryService
     {
         try
         {
-        return categories;
-
-        } catch (Exception ex)
+            return categories;
+        }
+        catch (Exception ex)
         {
             Debug.Write(ex.Message);
         }
         return null!;
     }
 
-    internal void AddOrUpdateCategory()
+    internal void AddOrUpdateCategory(Category categoryRequest)
     {
 
     }
 
-    internal void DeleteCategoryById()
+    internal void DeleteCategoryById(string id)
     {
         //Note! Deletes all products with the choosen categoryId too
     }
