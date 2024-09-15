@@ -1,6 +1,6 @@
 ﻿namespace ShoppingProject.Models;
 
-internal class Category
+public class Category
 {
     public string CategoryId { get; set; } = Guid.NewGuid().ToString();
     public string Name { get; set; } = "";
