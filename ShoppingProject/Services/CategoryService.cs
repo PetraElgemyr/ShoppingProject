@@ -5,6 +5,8 @@ namespace ShoppingApp.Services;
 public class CategoryService
 {
     private List<Category> _categories = [];
+    private readonly ProductService _productService = new ProductService();
+
     public Response GetAllCategories()
     {
         try
@@ -27,7 +29,7 @@ public class CategoryService
             }
 
             if (
-                !_categories.Any((x) => x.Name == categoryRequest.Name))
+                !_categories.Any((x) => x.Name.ToLower() == categoryRequest.Name.ToLower()))
             {
                 _categories.Add(categoryRequest);
                 return new Response { Succeeded = true, Message = $"Category was successfully added to the list!" };
@@ -47,7 +49,7 @@ public class CategoryService
     {
         try
         {
-            if (!_categories.Any((x) => x.Name == updatedCategory.Name))
+            if (_categories.Any((x) => x.Name.ToLower() == updatedCategory.Name.ToLower()))
             {
                 return new Response { Succeeded = false, Message = $"Category name aldready exists." };
             }
@@ -74,6 +76,21 @@ public class CategoryService
         try
         {
             var categoryToDelete = _categories.FirstOrDefault((x) => x.CategoryId == id);
+
+            if (categoryToDelete != null)
+            {
+                _categories.Remove(categoryToDelete);
+
+                // TODO ta bort alla produkter med den borttagna kategorin!
+                //_productService.DeleteAllProductsByCategoryId eller nåt 
+
+                return new Response { Succeeded = true, Message = $"Category {categoryToDelete.Name} was successfully deleted." };
+            }
+            else
+            {
+            return new Response { Succeeded = false, Message = $"Category could not be found." };
+
+            }
         }
         catch (Exception ex)
         {
