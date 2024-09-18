@@ -54,7 +54,7 @@ internal class CategoryMenu
         Console.ReadKey();
     }
 
-    internal void ListAllCategories()
+    public void ListAllCategories()
     {
         Response result = _categoryService.GetAllCategories();
 
@@ -105,7 +105,7 @@ internal class CategoryMenu
             Console.WriteLine(result.Message);
         }
     }
-    internal Category GetAndFindCategoryToUpdate()
+    internal void GetAndFindCategoryToUpdate()
     {
         Console.Clear();
         ListAllCategories();
@@ -143,7 +143,6 @@ internal class CategoryMenu
 
             }
         }
-        return null!;
     }
 
     internal void GetIdToDeleteAndHandleDeleteRequest()
