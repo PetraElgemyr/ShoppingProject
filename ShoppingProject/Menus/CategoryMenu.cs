@@ -19,12 +19,11 @@ internal class CategoryMenu
 
         Console.WriteLine("Enter an option: ");
         HandleCategoryMenuOption(Console.ReadLine() ?? "");
-        Console.ReadKey();
     }
 
-    public void HandleCategoryMenuOption(string option)
+    internal void HandleCategoryMenuOption(string option)
     {
-        if (int.TryParse(option, out int selectedOptionNumber))
+        if (int.TryParse(option.Trim(), out int selectedOptionNumber))
         {
             switch (selectedOptionNumber)
             {
@@ -38,14 +37,10 @@ internal class CategoryMenu
                     CreateCategoryRequest();
                     break;
                 case 3:
-                    string? idToUpdate = GetAndFindCategoryByIdFromUser();
-                    if (idToUpdate != null)
-                        _categoryService.UpdateCategoryById(  );
+                    GetAndFindCategoryToUpdate();
                     break;
                 case 4:
-                    string? idToDelete = GetAndFindCategoryByIdFromUser();
-                    if (idToDelete != null)
-                        _categoryService.DeleteCategoryById(idToDelete);
+                    GetIdToDeleteAndHandleDeleteRequest();
                     break;
                 default:
                     Console.WriteLine("Invalid option selected");
@@ -56,9 +51,8 @@ internal class CategoryMenu
         {
             Console.WriteLine("Invalid option selected");
         }
+        Console.ReadKey();
     }
-
-
 
     internal void ListAllCategories()
     {
@@ -98,10 +92,10 @@ internal class CategoryMenu
 
         Console.WriteLine("--- CREATE CATEGORY ---");
 
-        Console.Write("Enter category name: ");
-        newCategory.Name = Console.ReadLine() ?? "";
+        Console.Write("Enter category name (required and unique): ");
+        newCategory.Name = (Console.ReadLine() ?? "").Trim();
 
-        Console.Write("Enter description: ");
+        Console.Write("Enter description (optional): ");
         newCategory.Description = Console.ReadLine() ?? "";
 
         Response result = _categoryService.AddNewCategoryToList(newCategory);
@@ -111,19 +105,68 @@ internal class CategoryMenu
             Console.WriteLine(result.Message);
         }
     }
-    internal string? GetAndFindCategoryByIdFromUser()
+    internal Category GetAndFindCategoryToUpdate()
     {
         Console.Clear();
         ListAllCategories();
         Response result = _categoryService.GetAllCategories();
-        Console.WriteLine("Enter the id for the category to edit");
-        string selectedId = Console.ReadLine() ?? "";
 
-        if (selectedId != null && selectedId.Length > 0)
+        Console.WriteLine("Enter the category ID: ");
+        string selectedId = (Console.ReadLine() ?? "").Trim();
+
+        if (result != null)
         {
-            return selectedId;
+            IEnumerable<Category> categories = (IEnumerable<Category>)result.Content!;
+            var choosenCategory = categories.FirstOrDefault((x) => x.CategoryId.ToLower() == selectedId.ToLower());
+            if (choosenCategory != null)
+            {
+                Console.Clear();
+                Console.WriteLine($"ID: {choosenCategory.CategoryId}");
+                Console.WriteLine($"Name: {choosenCategory.Name}");
+                Console.WriteLine($"Description: {choosenCategory.Description}");
+                Console.WriteLine("--------------------");
+
+                Category updatedCategory = choosenCategory;
+
+                Console.WriteLine("Enter new category name (required and unique): ");
+                updatedCategory.Name = (Console.ReadLine() ?? "").Trim();
+
+                Console.WriteLine("Enter new description (optional): ");
+                updatedCategory.Description = Console.ReadLine() ?? "";
+
+                Response requestResponse = _categoryService.UpdateCategoryById(updatedCategory);
+                if (requestResponse != null)
+                {
+                    // TODO göra till if else för succeeded eller ej senare kanske?? 
+                    Console.WriteLine(requestResponse.Message);
+                }
+
+            }
         }
-        return null;
+        return null!;
+    }
+
+    internal void GetIdToDeleteAndHandleDeleteRequest()
+    {
+
+        Console.Clear();
+        ListAllCategories();
+        Response result = _categoryService.GetAllCategories();
+
+        Console.WriteLine("Enter the category ID: ");
+        string selectedId = (Console.ReadLine() ?? "").Trim();
+
+        if (!string.IsNullOrEmpty(selectedId))
+        {
+            Response requestResponse = _categoryService.DeleteCategoryById(selectedId);
+
+            if (requestResponse != null)
+            {
+                // TODO göra till if else för succeeded eller ej senare kanske?? 
+                Console.WriteLine(requestResponse.Message);
+            }
+        }
+
     }
 
 }
