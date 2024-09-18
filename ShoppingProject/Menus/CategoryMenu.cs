@@ -1,7 +1,7 @@
-﻿using ShoppingProject.Models;
-using ShoppingProject.Services;
+﻿using ShoppingApp.Models;
+using ShoppingApp.Services;
 
-namespace ShoppingProject.Menus;
+namespace ShoppingApp.Menus;
 
 internal class CategoryMenu
 {
@@ -18,7 +18,8 @@ internal class CategoryMenu
         Console.WriteLine("0. Exit application");
 
         Console.WriteLine("Enter an option: ");
-        //Console.ReadLine() ?? ""
+        HandleCategoryMenuOption(Console.ReadLine() ?? "");
+        Console.ReadKey();
     }
 
     public void HandleCategoryMenuOption(string option)
@@ -31,10 +32,23 @@ internal class CategoryMenu
                     _exitService.ExitApplication();
                     break;
                 case 1:
-                    CreateCategoryRequest();
+                    ListAllCategories();
                     break;
                 case 2:
-
+                    CreateCategoryRequest();
+                    break;
+                case 3:
+                    string? idToUpdate = GetAndFindCategoryByIdFromUser();
+                    if (idToUpdate != null)
+                        _categoryService.UpdateCategoryById(  );
+                    break;
+                case 4:
+                    string? idToDelete = GetAndFindCategoryByIdFromUser();
+                    if (idToDelete != null)
+                        _categoryService.DeleteCategoryById(idToDelete);
+                    break;
+                default:
+                    Console.WriteLine("Invalid option selected");
                     break;
             }
         }
@@ -48,35 +62,68 @@ internal class CategoryMenu
 
     internal void ListAllCategories()
     {
-        var response = _categoryService.GetAllCategories();
-        if (response != null)
-        {
-            Console.WriteLine("---- CATEGORIES ----");
+        Response result = _categoryService.GetAllCategories();
 
-            foreach (Category category in response)
+        if (result != null && result.Content != null)
+        {
+            var categories = (IEnumerable<Category>)result.Content;
+
+            if (categories.Count() > 0)
             {
-                Console.WriteLine($"Id: {category.CategoryId}");
-                Console.WriteLine($"Name: {category.Name}");
-                Console.WriteLine($"Description: {category.Description}");
-                Console.WriteLine();
+                Console.WriteLine("---- CATEGORIES ----");
+                foreach (Category category in categories)
+                {
+                    Console.WriteLine($"Id: {category.CategoryId}");
+                    Console.WriteLine($"Name: {category.Name}");
+                    Console.WriteLine($"Description: {category.Description}");
+                    Console.WriteLine();
+                }
             }
+            else
+            {
+                Console.WriteLine("No categories found.");
+
+            }
+        }
+        else
+        {
+            Console.WriteLine($"Something went wrong.");
         }
     }
 
     internal void CreateCategoryRequest()
     {
+        Console.Clear();
+        Category newCategory = new();
 
+        Console.WriteLine("--- CREATE CATEGORY ---");
+
+        Console.Write("Enter category name: ");
+        newCategory.Name = Console.ReadLine() ?? "";
+
+        Console.Write("Enter description: ");
+        newCategory.Description = Console.ReadLine() ?? "";
+
+        Response result = _categoryService.AddNewCategoryToList(newCategory);
+        if (result != null)
+        {
+            // TODO göra till if else för succeeded eller ej senare kanske?? 
+            Console.WriteLine(result.Message);
+        }
     }
-
-    internal void EditCategoryById(string id)
+    internal string? GetAndFindCategoryByIdFromUser()
     {
+        Console.Clear();
         ListAllCategories();
+        Response result = _categoryService.GetAllCategories();
         Console.WriteLine("Enter the id for the category to edit");
         string selectedId = Console.ReadLine() ?? "";
 
         if (selectedId != null && selectedId.Length > 0)
         {
-
+            return selectedId;
         }
+        return null;
     }
+
 }

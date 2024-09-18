@@ -1,5 +1,4 @@
-﻿
-using ShoppingProject.Menus;
+﻿using ShoppingApp.Menus;
 
 var menuService = new MainMenu();
 

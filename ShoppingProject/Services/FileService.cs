@@ -1,4 +1,4 @@
-﻿namespace ShoppingProject.Services;
+﻿namespace ShoppingApp.Services;
 
 internal class FileService
 {

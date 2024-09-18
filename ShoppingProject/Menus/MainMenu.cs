@@ -1,11 +1,11 @@
-﻿using ShoppingProject.Services;
+﻿using ShoppingApp.Services;
 
-namespace ShoppingProject.Menus;
+namespace ShoppingApp.Menus;
 
 internal class MainMenu
 {
 
-    private readonly ExitService _exitService =  new ExitService();
+    private readonly ExitService _exitService = new ExitService();
     private readonly CategoryMenu _categoryMenu = new CategoryMenu();
     private readonly ProductMenu _productMenu = new ProductMenu();
 
@@ -18,6 +18,7 @@ internal class MainMenu
 
         Console.WriteLine("Enter an option: ");
         HandleMainMenuOption(Console.ReadLine() ?? "");
+        Console.ReadKey();
     }
 
     public void HandleMainMenuOption(string option)
@@ -36,6 +37,7 @@ internal class MainMenu
                     _productMenu.ShowProductMenu();
                     break;
                 default:
+                    Console.WriteLine("Invalid option selected");
                     break;
             }
         }
@@ -44,8 +46,4 @@ internal class MainMenu
             Console.WriteLine("Invalid option selected");
         }
     }
-
-
-
-
 }

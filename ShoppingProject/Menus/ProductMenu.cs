@@ -1,7 +1,7 @@
-﻿using ShoppingProject.Models;
-using ShoppingProject.Services;
+﻿using ShoppingApp.Models;
+using ShoppingApp.Services;
 
-namespace ShoppingProject.Menus;
+namespace ShoppingApp.Menus;
 
 internal class ProductMenu
 {

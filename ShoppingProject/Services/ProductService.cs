@@ -1,17 +1,28 @@
-﻿using ShoppingProject.Models;
+﻿using ShoppingApp.Models;
 using System.Diagnostics;
 
-namespace ShoppingProject.Services;
+namespace ShoppingApp.Services;
 
-internal class ProductService
+public class ProductService
 {
     private List<Product> products = [];
-    internal void AddOrUpdateProduct(Product productRequest)
+    public void AddNewProduct(Product productRequest)
+    {
+        try
+        {
+
+        } catch ( Exception ex)
+        {
+
+        }
+    }
+
+    public void UpdateProduct()
     {
 
     }
 
-    internal IEnumerable<Product> GetAllProducts()
+    public IEnumerable<Product> GetAllProducts()
     {
         try
         {
@@ -24,12 +35,12 @@ internal class ProductService
         return null!;
     }
 
-    internal void DeleteProductById(string id)
+    public void DeleteProductById(string id)
     {
 
     }
 
-    internal void DeleteProductsByCategoryId(string categoryId)
+    public void DeleteProductsByCategoryId(string categoryId)
     {
 
     }
