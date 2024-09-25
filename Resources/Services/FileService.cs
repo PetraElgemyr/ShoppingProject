@@ -1,4 +1,5 @@
-﻿using Resources.Interfaces;
+﻿using Resources.Enums;
+using Resources.Interfaces;
 using Resources.Models;
 
 namespace Resources.Services;
@@ -18,11 +19,11 @@ public class FileService(string filePath) : IFileService
             using var sr = new StreamReader(_filePath);
             var content = sr.ReadToEnd();
 
-            return new Response<string> { Succeeded = true, Content = content };
+            return new Response<string> { Succeeded = Status.Success, Content = content };
         }
         catch (Exception ex)
         {
-            return new Response<string> { Succeeded = false, Message = $"{ex.Message}" };
+            return new Response<string> { Succeeded = Status.Failed, Message = $"{ex.Message}" };
         }
     }
     public Response<string> SaveToFile(string content)
@@ -33,11 +34,11 @@ public class FileService(string filePath) : IFileService
             using var sw = new StreamWriter(_filePath, false);
             sw.WriteLine(content);
 
-            return new Response<string> { Succeeded = true };
+            return new Response<string> { Succeeded = Status.Success };
         }
         catch (Exception ex)
         {
-            return new Response<string> { Succeeded = false, Message = $"{ex.Message}" };
+            return new Response<string> { Succeeded = Status.Failed, Message = $"{ex.Message}" };
         }
     }
 }

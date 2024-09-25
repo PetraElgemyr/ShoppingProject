@@ -6,30 +6,29 @@ namespace ShoppingApp.Menus;
 
 internal class MainMenu
 {
-    ICategoryService<Category, ICategory> categoryService = new CategoryService(@"C:\Skola\Nackademin\Programmering-sharp\ShoppingProject\categories.json");
-    IProductService<Product, IProduct> productService = new ProductService(@"C:\Skola\Nackademin\Programmering-sharp\ShoppingProject\products.json");
+    private readonly ICategoryService<Category, ICategory> _categoryService = new CategoryService(@"C:\Skola\Nackademin\Programmering-sharp\ShoppingProject\categories.json");
+    private readonly IProductService<Product, IProduct> _productService = new ProductService(@"C:\Skola\Nackademin\Programmering-sharp\ShoppingProject\products.json");
 
     public void ShowMainMenu()
     {
         Console.Clear();
-        Console.WriteLine("----CATEGORY MENU----");
+        Console.WriteLine("0. Exit application");
+
+        Console.WriteLine("\n----CATEGORY MENU----");
         Console.WriteLine("1. Create a new category");
         Console.WriteLine("2. List all categorys");
         Console.WriteLine("3. Update an existing category");
         Console.WriteLine("4. Delete a category and related products");
 
-        Console.WriteLine("----PRODUCT MENU----");
+        Console.WriteLine("\n----PRODUCT MENU----");
         Console.WriteLine("5. Create a new product");
         Console.WriteLine("6. List all products");
         Console.WriteLine("7. Update an existing product");
         Console.WriteLine("8. Delete a product");
 
-        Console.WriteLine("");
-        Console.WriteLine("0. Exit application");
 
         Console.WriteLine("Enter an option: ");
         HandleMenuOption(Console.ReadLine() ?? "");
-        Console.ReadKey();
     }
 
     public void HandleMenuOption(string option)
@@ -74,10 +73,9 @@ internal class MainMenu
         else
         {
             Console.WriteLine("Invalid option selected");
-        }
+        } 
+        Console.Write("\nPress any key to continue.");
         Console.ReadKey();
-
-
     }
 
     #region Category
@@ -96,7 +94,7 @@ internal class MainMenu
         Console.WriteLine("Enter description (optional): ");
         newCategory.Description = Console.ReadLine() ?? "";
 
-        Response<ICategory> result = categoryService.CreateAndAddCategoryToList(newCategory);
+        Response<ICategory> result = _categoryService.CreateAndAddCategoryToList(newCategory);
         if (result != null)
         {
             // TODO göra till if else för succeeded eller ej senare kanske?? 
@@ -107,7 +105,7 @@ internal class MainMenu
     // READ CATEGORIES
     public void ListAllCategories()
     {
-        Response<IEnumerable<ICategory>> result = categoryService.GetAllCategories();
+        Response<IEnumerable<ICategory>> result = _categoryService.GetAllCategories();
 
         if (result != null)
         {
@@ -116,10 +114,10 @@ internal class MainMenu
                 Console.WriteLine("---- CATEGORIES ----");
                 foreach (Category category in result.Content!)
                 {
-                    Console.WriteLine($"Id: {category.Id}");
+                    Console.WriteLine($"\nId: {category.Id}");
                     Console.WriteLine($"Name: {category.Name}");
                     Console.WriteLine($"Description: {category.Description}");
-                    Console.WriteLine();
+                
                 }
             }
             else
@@ -143,7 +141,7 @@ internal class MainMenu
         string selectedId = (Console.ReadLine() ?? "").Trim();
         if (!string.IsNullOrEmpty(selectedId))
         {
-            Response<ICategory> result = categoryService.GetOneCategoryById(selectedId);
+            Response<ICategory> result = _categoryService.GetOneCategoryById(selectedId);
 
             if (result != null && result.Content != null && result.Content!.Id == selectedId)
             {
@@ -165,7 +163,7 @@ internal class MainMenu
                     Console.WriteLine("Enter new description (optional): ");
                     categoryToUpdate.Description = Console.ReadLine() ?? "";
 
-                    Response<ICategory> requestResponse = categoryService.UpdateCategoryById(selectedId, categoryToUpdate);
+                    Response<ICategory> requestResponse = _categoryService.UpdateCategoryById(selectedId, categoryToUpdate);
                     if (requestResponse != null)
                     {
                         // TODO göra till if else för succeeded eller ej senare kanske?? 
@@ -191,7 +189,7 @@ internal class MainMenu
 
         Console.Clear();
         ListAllCategories();
-        Response<IEnumerable<ICategory>> result = categoryService.GetAllCategories();
+        Response<IEnumerable<ICategory>> result = _categoryService.GetAllCategories();
 
         if (result != null)
         {
@@ -200,7 +198,7 @@ internal class MainMenu
 
             if (!string.IsNullOrEmpty(selectedId))
             {
-                Response<ICategory> requestResponse = categoryService.DeleteCategoryById(selectedId);
+                Response<ICategory> requestResponse = _categoryService.DeleteCategoryById(selectedId);
 
                 if (requestResponse != null)
                 {
@@ -233,7 +231,7 @@ internal class MainMenu
         Console.WriteLine("Enter description (optional): ");
         newProduct.Description = Console.ReadLine() ?? "";
 
-        Console.WriteLine("Enter the product's price (required, min 1): ");
+        Console.WriteLine("Enter the product's price (required, min 1):");
         do
         {
             if (int.TryParse((Console.ReadLine() ?? "").Trim(), out int price) && price > 0)
@@ -247,29 +245,32 @@ internal class MainMenu
         } while (newProduct.Price < 1);
 
         // TODO kolla om shared class library kansk kan lösa?? referera till service dit för att komma åt categories?.
-        Response<IEnumerable<ICategory>> categoryResponse = categoryService.GetAllCategories();
+        Response<IEnumerable<ICategory>> categoryResponse = _categoryService.GetAllCategories();
 
         //Bara om det finns kategorier ska man fråga om categori-id för nya produkten
-        if (categoryResponse != null && categoryResponse.Content != null)
+        if (categoryResponse != null && categoryResponse.Content != null && categoryResponse.Content!.Any())
         {
-            var categories = categoryResponse.Content;
-
-            if (categories.Any())
+            ListAllCategories();
+            Console.WriteLine("\nEnter the product's new category ID (optional): ");
+            string categoryIdInput = "";
+            do
             {
-                ListAllCategories();
+                categoryIdInput = (Console.ReadLine() ?? "").Trim();
+                if (categoryResponse.Content.Any((x) => x.Id == categoryIdInput || string.IsNullOrEmpty(categoryIdInput)))
+                {
+                    newProduct.CategoryId = categoryIdInput;
+                
+                }
+                else if (!string.IsNullOrEmpty(categoryIdInput) && !categoryResponse.Content.Any((x) => x.Id == categoryIdInput))
+                {
+                    Console.WriteLine("Incorrect category ID. Please try again.");
 
-                Console.WriteLine("Enter category id (optional): ");
-                newProduct.CategoryId = (Console.ReadLine() ?? "").Trim();
-
-            }
-            else
-            {
-                Console.WriteLine("No categories found.");
-            }
-
+                }
+            } while (newProduct.CategoryId != categoryIdInput);
         }
 
-        Response<IProduct> result = productService.CreateAndAddProductToList(newProduct);
+
+        Response<IProduct> result = _productService.CreateAndAddProductToList(newProduct);
         if (result != null)
         {
             // TODO göra till if else för succeeded eller ej senare kanske?? 
@@ -281,8 +282,8 @@ internal class MainMenu
     // READ PRODUCTS
     internal void ListAllProducts()
     {
-        Response<IEnumerable<IProduct>> productResult = productService.GetAllProducts();
-        Response<IEnumerable<ICategory>> categoryResponse = categoryService.GetAllCategories();
+        Response<IEnumerable<IProduct>> productResult = _productService.GetAllProducts();
+        Response<IEnumerable<ICategory>> categoryResponse = _categoryService.GetAllCategories();
 
         if (productResult != null && productResult.Content != null)
         {
@@ -293,7 +294,7 @@ internal class MainMenu
                 Console.WriteLine("---- PRODUCTS ----");
                 foreach (Product p in products)
                 {
-                    Console.WriteLine($"Id: {p.Id}");
+                    Console.WriteLine($"\nId: {p.Id}");
                     Console.WriteLine($"Name: {p.Name}");
                     Console.WriteLine($"Description: {p.Description ?? "No description"}");
                     Console.WriteLine($"Price: {p.Price}");
@@ -305,7 +306,7 @@ internal class MainMenu
                         Console.WriteLine($"Category Name: {categoyName ?? "No selected category"}");
                     }
 
-                    Console.WriteLine();
+                    
                 }
             }
             else
@@ -324,8 +325,8 @@ internal class MainMenu
     internal void GetAndFindProductToUpdate()
     {
         Console.Clear();
-        Response<IEnumerable<IProduct>> productResult = productService.GetAllProducts();
-        Response<IEnumerable<ICategory>> categoryResponse = categoryService.GetAllCategories();
+        Response<IEnumerable<IProduct>> productResult = _productService.GetAllProducts();
+        Response<IEnumerable<ICategory>> categoryResponse = _categoryService.GetAllCategories();
 
         if (productResult != null)
         {
@@ -342,7 +343,7 @@ internal class MainMenu
                 {
                     Console.Clear();
                     Console.WriteLine("---- PRODUCT TO UPDATE ----");
-                    Console.WriteLine($"ID: {productToUpdate.Id}");
+                    Console.WriteLine($"\nID: {productToUpdate.Id}");
                     Console.WriteLine($"Name: {productToUpdate.Name}");
                     Console.WriteLine($"Description: {productToUpdate.Description}");
                     Console.WriteLine($"Price: {productToUpdate.Price} kronor");
@@ -354,17 +355,17 @@ internal class MainMenu
                         Console.WriteLine($"Category Name: {categoyName ?? "No selected category"}");
                     }
 
-                    Console.WriteLine("--------------------");
+                    Console.WriteLine("\n--------------------");
 
                     Product updatedProduct = new Product { Id = productToUpdate.Id };
 
-                    Console.WriteLine("Enter new product name (required and unique): ");
+                    Console.WriteLine("\nEnter new product name (required and unique): ");
                     updatedProduct.Name = (Console.ReadLine() ?? "").Trim();
 
                     Console.WriteLine("Enter new description (optional): ");
                     updatedProduct.Description = Console.ReadLine() ?? "";
 
-                    Console.WriteLine("Enter the product's price (required, min 1): ");
+                    Console.WriteLine("Enter the product's price (required, min 1):");
                     do
                     {
                         if (int.TryParse((Console.ReadLine() ?? "").Trim(), out int price) && price > 0)
@@ -378,18 +379,20 @@ internal class MainMenu
                     } while (updatedProduct.Price < 1);
 
                     // Om det finns några kategorier, begär cat-id och kolla om det finns. Då tilldela som cat-id. Om inga categories, skippa.
-                    if (categoryResponse.Content != null)
+                    if (categoryResponse != null && categoryResponse.Content != null && categoryResponse.Content!.Any())
                     {
                         ListAllCategories();
-                        Console.WriteLine("Enter new category ID (optional): ");
+                        Console.WriteLine("\nEnter new category ID (optional): ");
                         string categoryIdInput = "";
                         do
                         {
                             categoryIdInput = (Console.ReadLine() ?? "").Trim();
-                            if (categoryResponse.Content.Any((x) => x.Id == categoryIdInput))
+                            if (categoryResponse.Content.Any((x) => x.Id == categoryIdInput || string.IsNullOrEmpty(categoryIdInput)))
                             {
                                 updatedProduct.CategoryId = categoryIdInput;
-                            } else
+
+                            }
+                            else if (!string.IsNullOrEmpty(categoryIdInput) && !categoryResponse.Content.Any((x) => x.Id == categoryIdInput))
                             {
                                 Console.WriteLine("Incorrect category ID. Please try again.");
 
@@ -397,7 +400,8 @@ internal class MainMenu
                         } while (updatedProduct.CategoryId != categoryIdInput);
                     }
 
-                    Response<IProduct> requestResponse = productService.UpdateProductById(selectedId, updatedProduct);
+
+                    Response<IProduct> requestResponse = _productService.UpdateProductById(selectedId, updatedProduct);
                     if (requestResponse != null)
                     {
                         // TODO göra till if else för succeeded eller ej senare kanske?? 
@@ -432,7 +436,7 @@ internal class MainMenu
 
         if (!string.IsNullOrEmpty(selectedId))
         {
-            Response<IProduct> requestResponse = productService.DeleteProductById(selectedId);
+            Response<IProduct> requestResponse = _productService.DeleteProductById(selectedId);
 
             if (requestResponse != null)
             {

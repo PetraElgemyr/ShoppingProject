@@ -1,6 +1,7 @@
 ﻿
 
 using Newtonsoft.Json;
+using Resources.Enums;
 using Resources.Interfaces;
 using Resources.Models;
 
@@ -23,24 +24,35 @@ public class ProductService : IProductService<Product, IProduct>
 
         try
         {
-            //Glöm inte alla andra checkar innan man addar till listan och sparar till fil. 
+            var existingProduct = _products.FirstOrDefault(x => x.Name.ToLower() == productRequest.Name.ToLower() && x.Id != productRequest.Id);
+            if (existingProduct != null)
+            {
+                return new Response<IProduct> { Succeeded = Status.Exists, Message = $"Another Product with the name '{productRequest.Name}' already exists." };
+            }
+
+
+            if (string.IsNullOrEmpty(productRequest.Name) || string.IsNullOrEmpty(productRequest.Id) || string.IsNullOrEmpty(productRequest.Price.ToString()))
+            {
+                return new Response<IProduct> { Succeeded = Status.Failed, Message = $"Could not update product because all required fields (name and price) was not provided." };
+            }
+
             _products.Add(productRequest);
 
             var productsAsJson = JsonConvert.SerializeObject(_products);
             var response = _fileService.SaveToFile(productsAsJson);
 
-            if (response.Succeeded)
+            if (response.Succeeded == Status.Success)
             {
-                return new Response<IProduct> { Succeeded = true, Message = "Product was successsfully created :)" };
+                return new Response<IProduct> { Succeeded = Status.Success, Message = "Product was successsfully created and list was saved to file :)" };
             }
             else
             {
-                return new Response<IProduct> { Succeeded = false, Message = response.Message };
+                return new Response<IProduct> { Succeeded = Status.SuccessWithErrors, Message = "Product was created and added to the list but the list could not be saved to file." };
             }
         }
         catch (Exception ex)
         {
-            return new Response<IProduct> { Succeeded = false, Message = ex.Message };
+            return new Response<IProduct> { Succeeded = Status.Failed, Message = ex.Message };
         }
     }
     public Response<IEnumerable<IProduct>> GetAllProducts()
@@ -49,19 +61,19 @@ public class ProductService : IProductService<Product, IProduct>
         {
             var result = _fileService.GetFromFile();
 
-            if (result.Succeeded)
+            if (result.Succeeded == Status.Success && !string.IsNullOrEmpty(result.Content))
             {
                 _products = JsonConvert.DeserializeObject<List<Product>>(result.Content!)!;
-                return new Response<IEnumerable<IProduct>> { Succeeded = true, Content = _products };
+                return new Response<IEnumerable<IProduct>> { Succeeded = Status.Success, Content = _products };
             }
             else
             {
-                return new Response<IEnumerable<IProduct>> { Succeeded = false, Message = result.Message };
+                return new Response<IEnumerable<IProduct>> { Succeeded = Status.Failed, Message = "Could not fetch products from file." };
             }
         }
         catch (Exception ex)
         {
-            return new Response<IEnumerable<IProduct>> { Succeeded = false, Message = ex.Message };
+            return new Response<IEnumerable<IProduct>> { Succeeded = Status.Failed, Message = ex.Message };
         }
     }
     public Response<IProduct> GetOneProductById(string id)
@@ -71,14 +83,14 @@ public class ProductService : IProductService<Product, IProduct>
             var product = _products.FirstOrDefault((x) => x.Id == id);
             if (product != null)
             {
-                return new Response<IProduct> { Succeeded = false, Content = product };
+                return new Response<IProduct> { Succeeded = Status.Success, Content = product };
             }
 
-            return new Response<IProduct> { Succeeded = false, Message = "Product could not be found." };
+            return new Response<IProduct> { Succeeded = Status.NotFound, Message = "Product could not be found." };
         }
         catch (Exception ex)
         {
-            return new Response<IProduct> { Succeeded = false, Message = ex.Message };
+            return new Response<IProduct> { Succeeded = Status.Failed, Message = ex.Message };
         }
     }
 
@@ -90,14 +102,14 @@ public class ProductService : IProductService<Product, IProduct>
             // har redan check vid inmatning för pris så att det kan parseas, men dubbelcheck här också på att d inte är tomt eller null. 
             if (string.IsNullOrEmpty(updatedProduct.Name) || string.IsNullOrEmpty(updatedProduct.Id) || string.IsNullOrEmpty(updatedProduct.Price.ToString()))
             {
-                return new Response<IProduct> { Succeeded = false, Message = $"Could not update product because all required fields was not provided." };
+                return new Response<IProduct> { Succeeded = Status.Failed, Message = $"Could not update product because all required fields was not provided." };
             }
 
             //om det namnet är unikt eller om namnet används på den egna produkten (sigsjälv typ)
             var existingProduct = _products.FirstOrDefault(x => x.Name.ToLower() == updatedProduct.Name.ToLower() && x.Id != id);
             if (existingProduct != null)
             {
-                return new Response<IProduct> { Succeeded = false, Message = $"Product with the name '{updatedProduct.Name}' already exists." };
+                return new Response<IProduct> { Succeeded = Status.Exists, Message = $"Product with the name '{updatedProduct.Name}' already exists." };
             }
 
             var indexToUpdate = _products.FindIndex((x) => x.Id == id);
@@ -107,23 +119,23 @@ public class ProductService : IProductService<Product, IProduct>
                 var updatedProductsAsString = JsonConvert.SerializeObject(_products);
                 var response = _fileService.SaveToFile(updatedProductsAsString);
 
-                if (response.Succeeded)
+                if (response.Succeeded == Status.Success)
                 {
-                    return new Response<IProduct> { Succeeded = true, Message = "Product was successfully updated and saved!" };
+                    return new Response<IProduct> { Succeeded = Status.Success, Message = "Product was updated and the list was successfully saved to file!" };
                 }
                 else
                 {
-                    return new Response<IProduct> { Succeeded = false, Message = "Oops! Some error when saving the updated product." };
+                    return new Response<IProduct> { Succeeded = Status.SuccessWithErrors, Message = "Oops! Product was updated in the list but the list could not be saved to file." };
                 }
             }
             else
             {
-                return new Response<IProduct> { Succeeded = false, Message = "The product was not found and could not be updated." };
+                return new Response<IProduct> { Succeeded = Status.NotFound, Message = "The product was not found and could not be updated." };
             }
         }
         catch (Exception ex)
         {
-            return new Response<IProduct> { Succeeded = false, Message = ex.Message };
+            return new Response<IProduct> { Succeeded = Status.Failed, Message = ex.Message };
         }
     }
 
@@ -138,22 +150,22 @@ public class ProductService : IProductService<Product, IProduct>
                 {
                     var updatedProductListAsJson = JsonConvert.SerializeObject(_products);
                     var response = _fileService.SaveToFile(updatedProductListAsJson);
-                    if (response.Succeeded)
+                    if (response.Succeeded == Status.Success)
                     {
-                        return new Response<IProduct> { Succeeded = true, Message = "Product was successfully deleted!" };
+                        return new Response<IProduct> { Succeeded = Status.Success, Message = "Product was successfully deleted and the list was saved!" };
                     }
                 }
                 else
                 {
-                    return new Response<IProduct> { Succeeded = false, Message = "Something went wrong. Could not delete product." };
+                    return new Response<IProduct> { Succeeded = Status.Failed, Message = "Something went wrong. Could not delete product." };
                 }
             }
 
-            return new Response<IProduct> { Succeeded = false, Message = "Could not find product to remove." };
+            return new Response<IProduct> { Succeeded = Status.NotFound, Message = "Could not find product to remove." };
         }
         catch (Exception ex)
         {
-            return new Response<IProduct> { Succeeded = false, Message = ex.Message };
+            return new Response<IProduct> { Succeeded = Status.Failed, Message = ex.Message };
 
         }
     }
@@ -165,9 +177,10 @@ public class ProductService : IProductService<Product, IProduct>
     {
         try
         {
-
+            throw new NotImplementedException();
         } catch (Exception ex)
         {
+            throw new NotImplementedException();
 
         }
     }
