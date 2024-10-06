@@ -148,8 +148,8 @@ public class ProductService : IProductService<Product, IProduct>
             {
                 if (_products.Remove(_products.FirstOrDefault((x) => x.Id == id)!))
                 {
-                    var updatedProductListAsJson = JsonConvert.SerializeObject(_products);
-                    var response = _fileService.SaveToFile(updatedProductListAsJson);
+                    var updatedProductListAsJsonString = JsonConvert.SerializeObject(_products);
+                    var response = _fileService.SaveToFile(updatedProductListAsJsonString);
                     if (response.Succeeded == Status.Success)
                     {
                         return new Response<IProduct> { Succeeded = Status.Success, Message = "Product was successfully deleted and the list was saved!" };
@@ -173,14 +173,46 @@ public class ProductService : IProductService<Product, IProduct>
 
     // om orkar. ska triggas i mainmenu när cat blivit raderad. Då ta bort produkter med det categoriIDt.
     // Annars blir det weird vid visning av cat-name för prods
+
+
     public Response<IProduct> DeleteProductsWithSpecificCategoryId(string categoryId)
     {
         try
         {
-            throw new NotImplementedException();
-        } catch (Exception ex)
+            if (String.IsNullOrEmpty(categoryId))
+            {
+                // kasta fel
+                return new Response<IProduct> { Succeeded = Status.Failed, Message = $"No category ID was provided." };
+
+            }
+
+            int amountOfDeletedProducts = _products.RemoveAll((x) => x.CategoryId == categoryId);
+
+            if (amountOfDeletedProducts <= 0)
+            {
+                return new Response<IProduct> { Succeeded = Status.NotFound, Message = $"No categories with id: {categoryId} was found." };
+            }
+
+            var updatedProductListAsJsonString = JsonConvert.SerializeObject(_products);
+            var response = _fileService.SaveToFile(updatedProductListAsJsonString);
+
+            if (response.Succeeded == Status.Success && amountOfDeletedProducts > 0)
+            {
+                return new Response<IProduct> { Succeeded = Status.Success, Message = "Products was successfully deleted from the list and the list was saved!" };
+            }
+            else if (response.Succeeded != Status.Success && amountOfDeletedProducts > 0)
+            {
+                return new Response<IProduct> { Succeeded = Status.SuccessWithErrors, Message = "Found products was successfully deleted from the list but the list could not be saved to file." };
+            } else
+            {
+                return new Response<IProduct> { Succeeded = Status.Failed, Message = "Something went wrong. Could not delete products." };
+            }
+
+
+        }
+        catch (Exception ex)
         {
-            throw new NotImplementedException();
+            return new Response<IProduct> { Succeeded = Status.Failed, Message = ex.Message };
 
         }
     }

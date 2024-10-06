@@ -1,4 +1,5 @@
-﻿using Resources.Interfaces;
+﻿using Resources.Enums;
+using Resources.Interfaces;
 using Resources.Models;
 using Resources.Services;
 
@@ -6,6 +7,11 @@ namespace ShoppingApp.Menus;
 
 internal class MainMenu
 {
+    //private static readonly string _filePathCategories = Path.Combine(AppContext.BaseDirectory, @"\categories.json");
+    //private static readonly string _filePathProducts = Path.Combine(AppContext.BaseDirectory, @"\products.json");
+    //private readonly ICategoryService<Category, ICategory> _categoryService = new CategoryService(_filePathCategories);
+    //private readonly IProductService<Product, IProduct> _productService = new ProductService(_filePathProducts);
+
     private readonly ICategoryService<Category, ICategory> _categoryService = new CategoryService(@"C:\Skola\Nackademin\Programmering-sharp\ShoppingProject\categories.json");
     private readonly IProductService<Product, IProduct> _productService = new ProductService(@"C:\Skola\Nackademin\Programmering-sharp\ShoppingProject\products.json");
 
@@ -105,9 +111,10 @@ internal class MainMenu
     // READ CATEGORIES
     public void ListAllCategories()
     {
+        Console.Clear();
         Response<IEnumerable<ICategory>> result = _categoryService.GetAllCategories();
 
-        if (result != null)
+        if (result != null && result.Content != null)
         {
             if (result.Content!.Any())
             {
@@ -198,13 +205,19 @@ internal class MainMenu
 
             if (!string.IsNullOrEmpty(selectedId))
             {
-                Response<ICategory> requestResponse = _categoryService.DeleteCategoryById(selectedId);
-
-                if (requestResponse != null)
+                Response<ICategory> categoryResult = _categoryService.DeleteCategoryById(selectedId);
+                if(categoryResult != null && categoryResult.Succeeded == Status.Success
+                    /* || categoryResult.Succeeded == Status.SuccessWithErrors */ )
                 {
-                    // TODO göra till if else för succeeded eller ej senare kanske?? 
-                    Console.WriteLine(requestResponse.Message);
+                //Response<IProduct> productResult = _productService.Delete (selectedId);
+//if (productResult != null)
+//                {
+//                    // TODO göra till if else för succeeded eller ej senare kanske?? 
+//                    Console.WriteLine(productResult.Message);
+//                }
                 }
+
+                
             }
         }
 

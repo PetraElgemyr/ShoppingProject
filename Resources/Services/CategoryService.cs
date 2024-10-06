@@ -41,7 +41,7 @@ public class CategoryService : ICategoryService<Category, ICategory>
 
             if (response.Succeeded == Status.Success && amountOfCategoriesFromTheStart + 1 == _categories.Count())
             {
-                return new Response<ICategory> { Succeeded = Status.Success, Message = "Category was successfully created and saved to file! :) " };
+                return new Response<ICategory> { Succeeded = Status.Success, Message = "Category was successfully created and saved to file! :)" };
             }
            else
             {
@@ -118,12 +118,17 @@ public class CategoryService : ICategoryService<Category, ICategory>
             {
                 _categories[indexToUpdate] = updatedCategory;
 
+                // samma sak men lite "snyggare" kanske?? TODO: kanske ändra senare
+                //_categories[indexToUpdate].Name = updatedCategory.Name;
+                //_categories[indexToUpdate].Description = updatedCategory.Description;
+
+
                 var updatedCategoriesAsString = JsonConvert.SerializeObject(_categories);
                 var response = _fileService.SaveToFile(updatedCategoriesAsString);
 
                 if (response.Succeeded == Status.Success)
                 {
-                    return new Response<ICategory> { Succeeded = Status.Success, Message = "Category was successfully updated and saved to the file!" };
+                    return new Response<ICategory> { Succeeded = Status.Success, Message = "Category was successfully updated and saved to the file!", Content = updatedCategory };
                 }
                 else
                 {
