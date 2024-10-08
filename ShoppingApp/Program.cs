@@ -1,13 +1,13 @@
-﻿using ShoppingApp.Menus;
+﻿//using ShoppingApp.Menus;
 
 
-//ICategoryService<Category, ICategory> categoryService = new CategoryService(@"C:\Skola\Nackademin\Programmering-sharp\ShoppingProject\categories.json");
-//IProductService<Product, IProduct> productService = new ProductService(@"C:\Skola\Nackademin\Programmering-sharp\ShoppingProject\products.json");
+////ICategoryService<Category, ICategory> categoryService = new CategoryService(@"C:\Skola\Nackademin\Programmering-sharp\ShoppingProject\categories.json");
+////IProductService<Product, IProduct> productService = new ProductService(@"C:\Skola\Nackademin\Programmering-sharp\ShoppingProject\products.json");
 
 
-var menuService = new MainMenu();
+//var menuService = new MainMenu();
 
-while (true)
-{
-    menuService.ShowMainMenu();
-}
+//while (true)
+//{
+//    menuService.ShowMainMenu();
+//}

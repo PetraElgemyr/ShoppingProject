@@ -1,10 +1,10 @@
-﻿namespace Resources.Enums;
+﻿//namespace Resources.Enums;
 
-public enum Status
-{
-    Success,
-    Failed,
-    Exists,
-    SuccessWithErrors,
-    NotFound
-}
+//public enum Status
+//{
+//    Success,
+//    Failed,
+//    Exists,
+//    SuccessWithErrors,
+//    NotFound
+//}

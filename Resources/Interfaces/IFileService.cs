@@ -1,13 +1,13 @@
-﻿using Resources.Models;
+﻿//using Resources.Models;
 
-namespace Resources.Interfaces;
+//namespace Resources.Interfaces;
 
-public interface IFileService
-{
-    public Response<string> SaveToFile(string content);
+//public interface IFileService
+//{
+//    public Response<string> SaveToFile(string content);
 
-    public Response<string> GetFromFile();
+//    public Response<string> GetFromFile();
 
-}
+//}
 
 
