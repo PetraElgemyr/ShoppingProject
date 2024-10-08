@@ -1,71 +1,71 @@
 ﻿using Moq;
-using Resources.Enums;
-using Resources.Interfaces;
-using Resources.Models;
+using ShoppingApp.Resources.Enums;
+using ShoppingApp.Resources.Models;
+using ShoppingApp.Resources.Services;
 
 namespace ShoppingApp.Tests;
 
 public class CategoryServiceTests
 {
-    private readonly Mock<ICategoryService<Category, ICategory>> _mockCategoryService = new();
+    private readonly Mock<CategoryService> _mockCategoryService = new();
 
     [Fact]
-    public void GetAllCategories__ShouldGetAllCategoriesFromList_ReturnResponseWithContent()
+    public void GetAllCategories__ShouldGetAllCategoriesFromList_ReturnRequestResponseWithContent()
     {
         var category = new Category { Name = "Electronics" };
         var categories = new List<Category> { category };
 
-        var expectedResponse = new Response<IEnumerable<ICategory>> { Succeeded = Status.Success, Content = categories };
+        var expectedRequestResponse = new RequestResponse<IEnumerable<Category>> { Succeeded = Status.Success, Content = categories };
 
-        _mockCategoryService.Setup(categoryService => categoryService.GetAllCategories()).Returns(expectedResponse);
+        _mockCategoryService.Setup(categoryService => categoryService.GetAllCategories()).Returns(expectedRequestResponse);
         var categoryService = _mockCategoryService.Object;
 
-        var response = categoryService.GetAllCategories();
+        var RequestResponse = categoryService.GetAllCategories();
 
-        Assert.Equal(Status.Success, response.Succeeded);
-        Assert.Equal(categories, response.Content);
+        Assert.Equal(Status.Success, RequestResponse.Succeeded);
+        Assert.Equal(categories, RequestResponse.Content);
     }
 
     [Fact]
     public void CreateAndAddCategoryToList__ShouldReturnSuccess_WhenCategoryIsAddedToList()
     {
         var category = new Category { Name = "Kitchen" };
-        var expectedResponse = new Response<ICategory> { Succeeded = Status.Success, Message = "Category was successfully created and saved to file! :)" };
+        var expectedRequestResponse = new RequestResponse<Category> { Succeeded = Status.Success, Message = "Category was successfully created and saved to file! :)" };
 
-        _mockCategoryService.Setup(categoryService => categoryService.CreateAndAddCategoryToList(category)).Returns(expectedResponse);
+        _mockCategoryService.Setup(categoryService => categoryService.CreateAndAddCategoryToList(category)).Returns(expectedRequestResponse);
         var categoryService = _mockCategoryService.Object;
 
-        var response = categoryService.CreateAndAddCategoryToList(category);
+        var RequestResponse = categoryService.CreateAndAddCategoryToList(category);
 
-        Assert.Equal(Status.Success, response.Succeeded);
-        Assert.Equal(expectedResponse.Message, response.Message);
+        Assert.Equal(Status.Success, RequestResponse.Succeeded);
+        Assert.Equal(expectedRequestResponse.Message, RequestResponse.Message);
     }
 
     [Fact]
     public void CreateAndAddCategoryToList__ShouldReturnStatusExists_WhenAddingDuplicateToList()
     {
         var category = new Category { Name = "Kitchen" };
-        var expectedResponse = new Response<ICategory> { Succeeded = Status.Exists, Message = $"Another category with the name '{category.Name}' already exists." };
+        var expectedRequestResponse = new RequestResponse<Category> { Succeeded = Status.Exists, Message = $"Another category with the name '{category.Name}' already exists." };
 
-        _mockCategoryService.Setup(categoryService => categoryService.CreateAndAddCategoryToList(category)).Returns(expectedResponse);
+        _mockCategoryService.Setup(categoryService => categoryService.CreateAndAddCategoryToList(category)).Returns(expectedRequestResponse);
         var categoryService = _mockCategoryService.Object;
 
         // Lägg till första
         categoryService.CreateAndAddCategoryToList(category);
 
-        var response = categoryService.CreateAndAddCategoryToList(category);
+        var RequestResponse = categoryService.CreateAndAddCategoryToList(category);
 
 
-        Assert.Equal(Status.Exists, response.Succeeded);
-        Assert.Equal(expectedResponse.Message, response.Message);
+        Assert.Equal(Status.Exists, RequestResponse.Succeeded);
+        Assert.Equal(expectedRequestResponse.Message, RequestResponse.Message);
     }
 
     [Fact]
     public void GetOneCategoryById__ShouldReturnOneCategory_WhenCategoryExists() {
         var categeory = new Category { Id = Guid.NewGuid().ToString(), Name = "Bedroom" };
-        var expectedResponse = new Response<ICategory> { Succeeded = Status.Success, Content = categeory };
+        var expectedRequestResponse = new RequestResponse<Category> { Succeeded = Status.Success, Content = categeory };
 
-        _mockCategoryService.Setup(categoryService => categoryService.GetOneCategoryById(categeory.Id)).Returns(expectedResponse);
+        _mockCategoryService.Setup(categoryService => categoryService.GetOneCategoryById(categeory.Id)).Returns(expectedRequestResponse);
         var categoryService = _mockCategoryService.Object;
 
         var result = categoryService.GetOneCategoryById(categeory.Id);
@@ -81,16 +81,16 @@ public class CategoryServiceTests
         var id = Guid.NewGuid().ToString();
         var categeory = new Category { Id = id, Name = "Balcony" };
         var updatedCategory = new Category { Id = id, Name = "Outdoor and balcony" };
-        var expectedResponse = new Response<ICategory> { Succeeded = Status.Success, Message= "Category was successfully updated and saved to the file!", Content = updatedCategory };
+        var expectedRequestResponse = new RequestResponse<Category> { Succeeded = Status.Success, Message= "Category was successfully updated and saved to the file!", Content = updatedCategory };
 
 
-        _mockCategoryService.Setup(categoryService => categoryService.UpdateCategoryById(categeory.Id, updatedCategory)).Returns(expectedResponse);
+        _mockCategoryService.Setup(categoryService => categoryService.UpdateCategoryById(categeory.Id, updatedCategory)).Returns(expectedRequestResponse);
         var categoryService = _mockCategoryService.Object;
 
         var result = categoryService.UpdateCategoryById(id, updatedCategory);
 
         Assert.Equal(Status.Success, result.Succeeded);
-        Assert.Equal(expectedResponse.Message, result.Message);
+        Assert.Equal(expectedRequestResponse.Message, result.Message);
         Assert.NotEqual(categeory, result.Content);
     }
 
@@ -100,16 +100,16 @@ public class CategoryServiceTests
         var id = Guid.NewGuid().ToString();
         var categeory = new Category { Id = id, Name = "Bathroom" };
 
-        var expectedResponse =   new Response<ICategory> { Succeeded = Status.Success, Message = "Category was successfully deleted and list was saved to file!" };
+        var expectedRequestResponse =   new RequestResponse<Category> { Succeeded = Status.Success, Message = "Category was successfully deleted and list was saved to file!" };
 
 
-        _mockCategoryService.Setup(categoryService => categoryService.DeleteCategoryById(id)).Returns(expectedResponse);
+        _mockCategoryService.Setup(categoryService => categoryService.DeleteCategoryById(id)).Returns(expectedRequestResponse);
         var categoryService = _mockCategoryService.Object;
 
         var result = categoryService.DeleteCategoryById(id);
 
         Assert.Equal(Status.Success, result.Succeeded);
-        Assert.Equal(expectedResponse.Message, result.Message);
+        Assert.Equal(expectedRequestResponse.Message, result.Message);
 
     }
 

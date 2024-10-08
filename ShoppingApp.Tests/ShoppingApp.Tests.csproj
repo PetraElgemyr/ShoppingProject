@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Resources\Resources.csproj" />
+    <ProjectReference Include="..\ShoppingApp.Resources\ShoppingApp.Resources.csproj" />
   </ItemGroup>
 
   <ItemGroup>

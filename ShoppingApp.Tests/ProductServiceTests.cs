@@ -1,13 +1,12 @@
 ﻿using Moq;
-using Resources.Interfaces;
-using Resources.Models;
+using ShoppingApp.Resources.Services;
 
 namespace ShoppingApp.Tests;
 
 public class ProductServiceTests
 {
 
-    private readonly Mock<IProductService<Product, IProduct>> _mockProductService = new();
+    private readonly Mock<ProductService> _mockProductService = new();
 
     [Fact]
     public void GetAllProducts__ShouldGetAllProductsFromList_ReturnResponseWithContent()
