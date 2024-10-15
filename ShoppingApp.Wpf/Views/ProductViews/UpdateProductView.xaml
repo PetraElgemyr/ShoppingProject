@@ -5,8 +5,61 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ShoppingApp.Wpf.Views.ProductViews"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="700" d:DesignWidth="400"
+             xmlns:viewmodels="clr-namespace:ShoppingApp.Wpf.ViewModels.ProductViewModels"
+             d:DataContext="{d:DesignInstance Type=viewmodels:UpdateProductViewModel}"
+
+             >
     <Grid>
-            
+
+
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+
+        <StackPanel  Grid.Row="0"  Margin="0, 0, 0, 10" Background="Linen">
+            <TextBlock  VerticalAlignment="Center" Text="Update product" FontSize="20" Margin="10, 20"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Content="Show all products" Command="{Binding GoToProductOverviewCommand}" VerticalAlignment="Center" Margin="0,0,20,0"  Padding="10" Width="auto"  />
+            <Button Content="Go to categories" Command="{Binding GoToCategoryOverviewCommand}" VerticalAlignment="Center"  Padding="10" Width="auto"  />
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" Margin="10, 10"  Background="LightGray" >
+            <TextBlock Text="Product name (required)"  Margin="10, 15, 10, 5"/>
+            <TextBox Text="{Binding CurrentProduct.Name}" Margin="10, 0" Padding="5"/>
+
+            <TextBlock Text="Price in sek (required)" Margin="10, 15, 10, 5"/>
+            <TextBox Text="{Binding CurrentProduct.Price}" Margin="10, 0" Padding="5"/>
+
+            <TextBlock Text="Description (optional)" Margin="10, 15, 10, 5"/>
+            <TextBox Text="{Binding CurrentProduct.Description}" Margin="10, 0" Padding="5"/>
+
+            <TextBlock Text="Category ID (optional)" Margin="10, 15, 10, 5"/>
+            <TextBox Text="{Binding CurrentProduct.CategoryId}" Margin="10, 0" Padding="5"/>
+
+            <TextBlock Text="Category IDs" Margin="10, 15, 10, 5"/>
+            <ListView ItemsSource="{Binding Categeories}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Name}" Margin="5"/>
+                            <TextBlock Text="{Binding Id}" Margin="5"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+            <Button Command="{Binding UpdateProductCommand}" CommandParameter="{Binding CurrentProduct}" Content="Save product" Padding="8" Margin="40, 20" />
+            <Label Content="{Binding MessageAfterSave}" />
+        </StackPanel>
+
+
+
     </Grid>
 </UserControl>

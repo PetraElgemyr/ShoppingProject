@@ -5,8 +5,43 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ShoppingApp.Wpf.Views.CategoryViews"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="700" d:DesignWidth="400"
+             
+             xmlns:viewmodels="clr-namespace:ShoppingApp.Wpf.ViewModels.CategoryViewModels"
+             d:DataContext="{d:DesignInstance Type=viewmodels:CreateCategoryViewModel}"
+
+             >
     <Grid>
-            
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+
+        <StackPanel  Grid.Row="0"  Margin="0, 0, 0, 10" Background="Linen">
+            <TextBlock Text="Create cagetory" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Content="Show all products" Command="{Binding GoToProductOverviewCommand}" VerticalAlignment="Center" Margin="0,0,20,0"  Padding="10" Width="auto"  />
+            <Button Content="Go to categories" Command="{Binding GoToCategoryOverviewCommand}" VerticalAlignment="Center"  Padding="10" Width="auto"  />
+        </StackPanel>
+
+
+        <StackPanel Grid.Row="2" Margin="10, 10"  Background="LightGray" >
+            <TextBlock Text="Category name (required)"  Margin="10, 15, 10, 5"/>
+            <TextBox Text="{Binding Category.Name}" Margin="10, 0" Padding="5"/>
+
+            <TextBlock Text="Description (optional)" Margin="10, 15, 10, 5"/>
+            <TextBox Text="{Binding Category.Description}" Margin="10, 0" Padding="5"/>
+
+            <Button Command="{Binding SaveCategoryCommand}" CommandParameter="{Binding}" Content="Save category" Padding="8" Margin="40, 20" />
+            <Label Content="{Binding MessageAfterSave}"/>
+
+        </StackPanel>
+
+
     </Grid>
 </UserControl>

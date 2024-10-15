@@ -5,8 +5,92 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ShoppingApp.Wpf.Views.ProductViews"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
+             d:DesignHeight="700" d:DesignWidth="400"
+             xmlns:viewmodel="clr-namespace:ShoppingApp.Wpf.ViewModels.ProductViewModels"
+             d:DataContext="{d:DesignInstance Type=viewmodel:ProductOverviewViewModel}"
+             >
+    <Grid Height="auto">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel  Grid.Row="0"  Margin="0, 0, 0, 10" Background="Linen">
+            <TextBlock  VerticalAlignment="Center" Text="Product overview" FontSize="20" Margin="10, 20"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Content="Show all categories" Command="{Binding GoToCategoryOverviewCommand}" VerticalAlignment="Center" Margin="0,0,20,0"  Padding="10" Width="auto"  />
+            <Button Content="Add new product"  Command="{Binding GoToAddProductCommand}" Width="auto" Padding="10"  />
+        </StackPanel>
+
+        <StackPanel Grid.Row="2">
+            <ListView ItemsSource="{Binding Products}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel  Orientation="Horizontal" HorizontalAlignment="Center">
+                            <TextBlock  VerticalAlignment="Center" Margin="5,2,15, 2"   Text="{Binding Name}" />
+                            <TextBlock  VerticalAlignment="Center" Margin="5,2,15,2"  Text="{Binding Price}" />
+                            <Button  VerticalAlignment="Center" Margin="0,0,20,0"  Command="{Binding DataContext.GoToUpdateProductCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}">
+                                
+                                <Button.Style>
+                                    <Style TargetType="Button">
+                                        <Setter Property="Background" Value="LightSteelBlue" />
+                                        <Setter Property="BorderThickness" Value="2" />
+                                        <Setter Property="Foreground" Value="Black" />
+                                        <Setter Property="FontSize" Value="15" />
+
+                                        <Style.Resources>
+                                            <Style TargetType="Border">
+                                                <Setter Property="CornerRadius" Value="5"/>
+                                            </Style>
+                                        </Style.Resources>
+
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True" >
+                                                <Setter Property="Foreground" Value="Gray" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                                
+                                <TextBlock Text="&#x270F;" />
+                            </Button>
+                            <Button  VerticalAlignment="Center" Margin="0,0,20,0" Command="{Binding DataContext.DeleteProductCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}">
+
+                                <Button.Style>
+                                    <Style TargetType="Button">
+                                        <Setter Property="Background" Value="LightSteelBlue" />
+                                        <Setter Property="BorderThickness" Value="2" />
+                                        <Setter Property="Foreground" Value="Black" />
+                                        <Setter Property="FontSize" Value="15" />
+
+                                        <Style.Resources>
+                                            <Style TargetType="Border">
+                                                <Setter Property="CornerRadius" Value="5"/>
+                                            </Style>
+                                        </Style.Resources>
+
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True" >
+                                                <Setter Property="Foreground" Value="Red" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                                
+                                <TextBlock  FontFamily="Segoe MDL2 Assets"  Text="&#xE74D;" FontSize="20"/>
+                            </Button>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackPanel>
+
+
     </Grid>
 </UserControl>
+
+

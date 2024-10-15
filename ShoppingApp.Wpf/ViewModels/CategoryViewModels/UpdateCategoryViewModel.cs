@@ -1,5 +1,7 @@
-﻿namespace ShoppingApp.Wpf.ViewModels.CategoryViewModels;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-public class UpdateCategoryViewModel
+namespace ShoppingApp.Wpf.ViewModels.CategoryViewModels;
+
+public partial class UpdateCategoryViewModel : ObservableObject
 {
 }
