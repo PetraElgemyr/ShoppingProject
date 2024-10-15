@@ -4,22 +4,33 @@ using ShoppingApp.Resources.Models;
 
 namespace ShoppingApp.Resources.Services;
 
-public class FileService(string filePath) : IFileService
+public abstract class FileService : IFileService
 {
-    private readonly string _filePath = filePath;
+    private readonly string _filePath;
+    protected FileService(string filePath)
+    {
+        _filePath = filePath;
+    }
+
 
     public RequestResponse<string> GetFromFile()
     {
         try
         {
-            if (!File.Exists(_filePath))
+            if (File.Exists(_filePath))
             {
-                throw new FileNotFoundException("File not found.");
-            }
-            using var sr = new StreamReader(_filePath);
-            var content = sr.ReadToEnd();
+                using var sr = new StreamReader(_filePath);
+                var content = sr.ReadToEnd();
+                return new RequestResponse<string> { Succeeded = Status.Success, Content = content };
 
-            return new RequestResponse<string> { Succeeded = Status.Success, Content = content };
+            }
+            else
+            {
+                return new RequestResponse<string> { Succeeded = Status.NotFound, Message = "File not found"};
+
+            }
+         
+
         }
         catch (Exception ex)
         {
@@ -31,10 +42,7 @@ public class FileService(string filePath) : IFileService
         try
         {
             //Directory.CreateDirectory() // Skapa katalog och stoppa filen i den katalogen om man vill
-            if (!File.Exists(_filePath))
-            {
-                return new RequestResponse<string> { Succeeded = Status.Failed, Message = "File not found." };
-            }
+          
 
             using var sw = new StreamWriter(_filePath, false);
             sw.WriteLine(content);

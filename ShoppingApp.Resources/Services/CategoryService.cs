@@ -5,11 +5,15 @@ using ShoppingApp.Resources.Models;
 
 namespace ShoppingApp.Resources.Services;
 
-public class CategoryService(IFileService fileService)
+public class CategoryService
 {
     private List<Category> _categories = [];
-    private readonly IFileService _fileService = fileService;
+    private readonly ICategoryFileService _fileService;
 
+    public CategoryService(ICategoryFileService fileService)
+    {
+        _fileService = fileService;
+    }
 
     public RequestResponse<Category> CreateAndAddCategoryToList(Category categoryRequest)
     {

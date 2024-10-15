@@ -20,10 +20,10 @@ public class CategoryServiceTests
         _mockCategoryService.Setup(categoryService => categoryService.GetAllCategories()).Returns(expectedRequestResponse);
         var categoryService = _mockCategoryService.Object;
 
-        var RequestResponse = categoryService.GetAllCategories();
+        var requestResponse = categoryService.GetAllCategories();
 
-        Assert.Equal(Status.Success, RequestResponse.Succeeded);
-        Assert.Equal(categories, RequestResponse.Content);
+        Assert.Equal(Status.Success, requestResponse.Succeeded);
+        Assert.Equal(categories, requestResponse.Content);
     }
 
     [Fact]
@@ -35,10 +35,10 @@ public class CategoryServiceTests
         _mockCategoryService.Setup(categoryService => categoryService.CreateAndAddCategoryToList(category)).Returns(expectedRequestResponse);
         var categoryService = _mockCategoryService.Object;
 
-        var RequestResponse = categoryService.CreateAndAddCategoryToList(category);
+        var requestResponse = categoryService.CreateAndAddCategoryToList(category);
 
-        Assert.Equal(Status.Success, RequestResponse.Succeeded);
-        Assert.Equal(expectedRequestResponse.Message, RequestResponse.Message);
+        Assert.Equal(Status.Success, requestResponse.Succeeded);
+        Assert.Equal(expectedRequestResponse.Message, requestResponse.Message);
     }
 
     [Fact]
@@ -53,11 +53,11 @@ public class CategoryServiceTests
         // Lägg till första
         categoryService.CreateAndAddCategoryToList(category);
 
-        var RequestResponse = categoryService.CreateAndAddCategoryToList(category);
+        var requestResponse = categoryService.CreateAndAddCategoryToList(category);
 
 
-        Assert.Equal(Status.Exists, RequestResponse.Succeeded);
-        Assert.Equal(expectedRequestResponse.Message, RequestResponse.Message);
+        Assert.Equal(Status.Exists, requestResponse.Succeeded);
+        Assert.Equal(expectedRequestResponse.Message, requestResponse.Message);
     }
 
     [Fact]

@@ -5,12 +5,15 @@ using ShoppingApp.Resources.Models;
 
 namespace ShoppingApp.Resources.Services;
 
-public class ProductService(IFileService fileService)
+public class ProductService
 {
-
     private List<Product> _products = [];
-    private readonly IFileService _fileService = fileService;
+    private readonly IProductFileService _fileService;
 
+    public ProductService(IProductFileService fileService)
+    {
+        _fileService = fileService;
+    }
 
     public RequestResponse<Product> CreateAndAddProductToList(Product productRequest)
     {
@@ -51,6 +54,14 @@ public class ProductService(IFileService fileService)
     {
         try
         {
+
+            //var startProduct = new Product { Id = Guid.NewGuid().ToString(), Name = "Test product", Price = 100, CategoryId = "143252435" };
+            //_products.Add(startProduct);
+            //return new RequestResponse<IEnumerable<Product>> { Succeeded = Status.Success, Content = _products };
+            //CreateAndAddProductToList(startProduct);
+
+            /*********/
+
             var result = _fileService.GetFromFile();
 
             if (result.Succeeded == Status.Success && !string.IsNullOrEmpty(result.Content))
@@ -82,7 +93,7 @@ public class ProductService(IFileService fileService)
         }
         catch (Exception ex)
         {
-            return new RequestRequestResponse<Product> { Succeeded = Status.Failed, Message = ex.Message };
+            return new RequestResponse<Product> { Succeeded = Status.Failed, Message = ex.Message };
         }
     }
 
@@ -113,7 +124,7 @@ public class ProductService(IFileService fileService)
 
                 if (RequestResponse.Succeeded == Status.Success)
                 {
-                    return new RequestResponse<Product> { Succeeded = Status.Success, Message = "Product was updated and the list was successfully saved to file!" };
+                    return new RequestResponse<Product> { Succeeded = Status.Success, Message = "Product was updated and the list was successfully saved to file!", Content = updatedProduct };
                 }
                 else
                 {
