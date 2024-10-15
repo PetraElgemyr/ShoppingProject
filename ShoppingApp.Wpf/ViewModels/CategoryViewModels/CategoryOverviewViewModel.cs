@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
+using ShoppingApp.Resources.Enums;
 using ShoppingApp.Resources.Models;
 using ShoppingApp.Resources.Services;
 using ShoppingApp.Wpf.ViewModels.ProductViewModels;
@@ -13,6 +14,7 @@ public partial class CategoryOverviewViewModel : ObservableObject
 
     private readonly IServiceProvider _serviceProvider;
     private readonly CategoryService _categoryService;
+    private readonly ProductService _productService;
 
 
     [ObservableProperty]
@@ -22,10 +24,11 @@ public partial class CategoryOverviewViewModel : ObservableObject
     private Category _category = new();
 
 
-    public CategoryOverviewViewModel(IServiceProvider serviceProvider, CategoryService categoryService)
+    public CategoryOverviewViewModel(IServiceProvider serviceProvider, CategoryService categoryService, ProductService productService)
     {
         _serviceProvider = serviceProvider;
         _categoryService = categoryService;
+        _productService = productService;
         GetCategories();
     }
 
@@ -89,14 +92,31 @@ public partial class CategoryOverviewViewModel : ObservableObject
     }
 
     [RelayCommand]
-    public void UpdateCategory()
+    public void UpdateCategory(Category category)
     {
+        try
+        {
 
+        }
+        catch (Exception)
+        { }
     }
 
     [RelayCommand]
-    public void DeleteCategory()
+    public void DeleteCategory(Category category)
     {
 
+        try
+        {
+          var categoryRequestResult =  _categoryService.DeleteCategoryById(category.Id);
+            if (categoryRequestResult.Succeeded == Status.Success)
+            {
+                _productService.DeleteProductsWithSpecificCategoryId(category.Id);
+                // TODO: när man raderar kategori, radera alla produkter som har den kategorin, därav behövs prod service
+                GetCategories();
+            }
+        }
+        catch (Exception)
+        { }
     }
 }

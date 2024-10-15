@@ -27,18 +27,6 @@ public partial class UpdateProductViewModel: ObservableObject
     private string _messageAfterSave;
 
 
-    //public UpdateProductViewModel(IServiceProvider serviceProvider, ProductService productService, CategoryService categoryService, CurrentContextService currentContextService)
-    //{
-    //    _serviceProvider = serviceProvider;
-    //    _productService = productService;
-    //    _categoryService = categoryService;
-    //    _currentContextService = currentContextService;
-    //    _currentProduct = _currentContextService.GetSelectedProduct();
-    //    GetCategories();
-    //    _messageAfterSave = "";
-
-    //}
-
     public UpdateProductViewModel(IServiceProvider serviceProvider, ProductService productService, CategoryService categoryService, CurrentContextService currentContextService)
     {
         _serviceProvider = serviceProvider;
