@@ -35,8 +35,8 @@ public class ProductService : IProductService
             }
             _products.Add(productRequest);
 
-            var productsAsJson = JsonConvert.SerializeObject(_products);
-            var RequestResponse = _fileService.SaveToFile(productsAsJson);
+            var productsAsJsonString = JsonConvert.SerializeObject(_products);
+            var RequestResponse = _fileService.SaveToFile(productsAsJsonString);
 
             if (RequestResponse.Succeeded == Status.Success)
             {
