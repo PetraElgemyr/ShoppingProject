@@ -5,7 +5,9 @@ using ShoppingApp.Resources.Models;
 
 namespace ShoppingApp.Resources.Services;
 
-public class ProductService
+
+
+public class ProductService : IProductService
 {
     private List<Product> _products = [];
     private readonly IProductFileService _fileService;
@@ -54,14 +56,6 @@ public class ProductService
     {
         try
         {
-
-            //var startProduct = new Product { Id = Guid.NewGuid().ToString(), Name = "Test product", Price = 100, CategoryId = "143252435" };
-            //_products.Add(startProduct);
-            //return new RequestResponse<IEnumerable<Product>> { Succeeded = Status.Success, Content = _products };
-            //CreateAndAddProductToList(startProduct);
-
-            /*********/
-
             var result = _fileService.GetFromFile();
 
             if (result.Succeeded == Status.Success && !string.IsNullOrEmpty(result.Content))

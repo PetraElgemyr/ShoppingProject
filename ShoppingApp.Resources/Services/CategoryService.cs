@@ -5,7 +5,7 @@ using ShoppingApp.Resources.Models;
 
 namespace ShoppingApp.Resources.Services;
 
-public class CategoryService
+public class CategoryService : ICategoryService
 {
     private List<Category> _categories = [];
     private readonly ICategoryFileService _fileService;
@@ -66,7 +66,7 @@ public class CategoryService
             }
             else
             {
-                return new RequestResponse<IEnumerable<Category>> { Succeeded = Status.Failed, Message = result.Message };
+                return new RequestResponse<IEnumerable<Category>> { Succeeded = Status.Failed, Message = "Could not fetch categories from file." };
             }
         }
         catch (Exception ex)
