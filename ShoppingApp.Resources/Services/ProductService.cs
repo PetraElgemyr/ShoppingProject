@@ -168,12 +168,18 @@ public class ProductService : IProductService
     }
 
 
-    // om orkar. ska triggas i mainmenu när cat blivit raderad. Då ta bort produkter med det categoriIDt.
-    // Annars blir det weird vid visning av cat-name för prods
 
+
+
+
+
+
+    
 
     public RequestResponse<Product> DeleteProductsWithSpecificCategoryId(string categoryId)
     {
+        // TODO. om orkar. ska triggas när kategori blivit raderad. Då ta bort produkter med det categoriIDt.
+    // Annars blir det weird vid visning av cat-name för prods
         try
         {
             if (String.IsNullOrEmpty(categoryId))
