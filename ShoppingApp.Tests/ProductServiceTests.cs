@@ -57,7 +57,7 @@ public class ProductServiceTests
         var productService = _mockProductService.Object;    
         var result = productService.CreateAndAddProductToList(product);
 
-        Assert.True(result.Succeeded == Status.Success);
+        Assert.Equal(Status.Success, result.Succeeded );
         Assert.Equal(expectedRequestResponse.Message, result.Message);
     }
 
@@ -74,7 +74,7 @@ public class ProductServiceTests
 
         var result = productService.CreateAndAddProductToList(product);
 
-        Assert.True(result.Succeeded == Status.Exists);
+        Assert.Equal(Status.Exists, result.Succeeded);
         Assert.Equal(expectedRequestResponse.Message, result.Message);
     }
 
@@ -90,7 +90,7 @@ public class ProductServiceTests
         var productService = _mockProductService.Object;
         var result = productService.UpdateProductById(id, updatedProduct);
 
-        Assert.True(result.Succeeded == Status.Success);
+        Assert.Equal(Status.Success, result.Succeeded );
         Assert.Equal(expectedRequestResponse.Message, result.Message);
         Assert.NotEqual(product, result.Content);
     }
