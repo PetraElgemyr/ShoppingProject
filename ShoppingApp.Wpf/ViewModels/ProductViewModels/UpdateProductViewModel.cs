@@ -108,6 +108,7 @@ public partial class UpdateProductViewModel: ObservableObject
                 if (result.Succeeded == Status.Success && !string.IsNullOrEmpty(result.Message))
                 {
                     MessageAfterSave = result.Message;
+                    // nollställ produkten i contextet, men ej lokala currentProduct
                     _currentContextService.SetSelectedProduct(new Product());
                 }
             }

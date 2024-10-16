@@ -14,23 +14,26 @@ public partial class CreateProductViewModel : ObservableObject
     private readonly IServiceProvider _serviceProvider;
     private readonly ProductService _productService;
     private readonly CategoryService _categoryService;
+    readonly CurrentContextService _currentContextService;
 
 
     [ObservableProperty]
-    private Product _product = new Product();
+    private Product _product;
 
     [ObservableProperty]
     private ObservableCollection<Category> _categories = [];
-    public CreateProductViewModel(IServiceProvider serviceProvider, ProductService productService, CategoryService categoryService)
+    public CreateProductViewModel(IServiceProvider serviceProvider, ProductService productService, CategoryService categoryService, CurrentContextService currentContextService)
     {
         _serviceProvider = serviceProvider;
         _productService = productService;
         _categoryService = categoryService;
+        _currentContextService = currentContextService;
+        _product = _currentContextService.GetSelectedProduct();
         GetCategories();
 
     }
 
-    
+
     public void GetCategories()
     {
         try
@@ -68,6 +71,28 @@ public partial class CreateProductViewModel : ObservableObject
         mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<ProductOverviewViewModel>();
     }
 
+
+    [RelayCommand]
+    public void UpdateCategoryIdForCurrentProduct(string id)
+    {
+        try
+        {
+            if (!string.IsNullOrEmpty(id))
+            {
+                Product.CategoryId = id;
+                _currentContextService.SetSelectedProduct(Product);
+
+                // sätt om, dvs "uppdatera" viewmodelen för att visa uppdaterade categoryId
+                var mainViewModel = _serviceProvider.GetRequiredService<MainWindowViewModel>();
+                mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<CreateProductViewModel>();
+            }
+        }
+        catch (Exception)
+        { }
+    }
+
+
+
     [RelayCommand]
     public void SaveProduct(Product product)
     {
@@ -76,7 +101,10 @@ public partial class CreateProductViewModel : ObservableObject
             if (product != null)
             {
                 _productService.CreateAndAddProductToList(product);
+
+                // måste tömma och nollställa min produkt
                 Product = new Product();
+                _currentContextService.SetSelectedProduct(Product);
             }
         }
         catch (Exception)
