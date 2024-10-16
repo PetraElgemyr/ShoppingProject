@@ -26,6 +26,9 @@ public partial class UpdateProductViewModel: ObservableObject
     [ObservableProperty]
     private string _messageAfterSave;
 
+    [ObservableProperty]
+    private string _errorMessage;
+
 
     public UpdateProductViewModel(IServiceProvider serviceProvider, ProductService productService, CategoryService categoryService, CurrentContextService currentContextService)
     {
@@ -35,6 +38,7 @@ public partial class UpdateProductViewModel: ObservableObject
         _currentContextService = currentContextService;
         _currentProduct = _currentContextService.GetSelectedProduct();
         _messageAfterSave = "";
+        _errorMessage = "";
         GetCategories();
     }
 
@@ -67,7 +71,31 @@ public partial class UpdateProductViewModel: ObservableObject
         }
     }
 
+
+
     // TODO. skapa klickevent på categorierna, som tillsätter currentProduct.CategoryId
+    [RelayCommand]
+    public void UpdateCategoryIdForCurrentProduct(string id)
+    {
+        try
+        {
+            if (!string.IsNullOrEmpty(id))
+            {
+                CurrentProduct.CategoryId = id;
+                _currentContextService.SetSelectedProduct(CurrentProduct);
+
+                // sätt om, dvs "uppdatera" viewmodelen för att visa uppdaterade categoryId
+                var mainViewModel = _serviceProvider.GetRequiredService<MainWindowViewModel>();
+                mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<UpdateProductViewModel>();
+
+            } else
+            {
+                ErrorMessage = "No category ID was assigned to product";
+            }
+        }
+        catch (Exception)
+        {}
+    }
 
     [RelayCommand]
     public void UpdateProduct(Product updatedProduct)
