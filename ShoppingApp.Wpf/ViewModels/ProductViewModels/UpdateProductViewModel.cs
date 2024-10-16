@@ -105,12 +105,15 @@ public partial class UpdateProductViewModel: ObservableObject
             if (updatedProduct != null)
             {
                 var result = _productService.UpdateProductById(updatedProduct.Id, updatedProduct);
-                if (result.Succeeded == Status.Success && !string.IsNullOrEmpty(result.Message))
+                if (result.Succeeded == Status.Success)
                 {
-                    MessageAfterSave = result.Message;
-                    // nollställ produkten i contextet, men ej lokala currentProduct
+                    // nollställ produkten och valt catId i contextet, EJ currentProduct
                     _currentContextService.SetSelectedProduct(new Product());
+                    _currentContextService.SetSelectedCategoryId("");
+
                 }
+                MessageAfterSave = result.Message ?? "";
+
             }
         }
         catch (Exception ex)

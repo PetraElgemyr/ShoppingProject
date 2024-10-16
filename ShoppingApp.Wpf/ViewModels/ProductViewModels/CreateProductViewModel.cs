@@ -24,6 +24,10 @@ public partial class CreateProductViewModel : ObservableObject
 
     [ObservableProperty]
     private ObservableCollection<Category> _categories = [];
+
+    [ObservableProperty]
+    private string _messageAfterSave = "";
+
     public CreateProductViewModel(IServiceProvider serviceProvider, ProductService productService, CategoryService categoryService, CurrentContextService currentContextService)
     {
         _serviceProvider = serviceProvider;
@@ -117,20 +121,19 @@ public partial class CreateProductViewModel : ObservableObject
         {
             if (product != null)
             {
-                _productService.CreateAndAddProductToList(product);
+                var result = _productService.CreateAndAddProductToList(product);
 
-                // måste tömma och nollställa min produkt samt valt category id
-                Product = new Product();
-                _currentContextService.SetSelectedProduct(Product);
-                _currentContextService.SetSelectedCategoryId("");
-
+                if (result.Succeeded == Status.Success)
+                {
+                    // måste tömma och nollställa min produkt samt valt category id
+                    Product = new Product();
+                    _currentContextService.SetSelectedProduct(Product);
+                    _currentContextService.SetSelectedCategoryId("");
+                }
+                MessageAfterSave = result.Message ?? "";
             }
         }
         catch (Exception)
-        {
-        }
-
+        { }
     }
-
-
 }

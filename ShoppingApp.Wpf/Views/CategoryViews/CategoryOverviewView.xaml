@@ -28,7 +28,7 @@
         </StackPanel>
 
         <StackPanel Grid.Row="2" >
-            <Label Margin="5" Content="When deleting a category, all related products will also be removed!" />
+            <TextBlock Margin="10, 0, 0,10" Text="When deleting a category, all related products will also be removed!" TextWrapping="Wrap" Foreground="DarkRed" />
             <ListView ItemsSource="{Binding Categories}">
                 <ListView.ItemTemplate>
                     <DataTemplate>

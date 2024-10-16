@@ -38,7 +38,7 @@
             <TextBox Text="{Binding Category.Description}" Margin="10, 0" Padding="5"/>
 
             <Button Command="{Binding SaveCategoryCommand}" CommandParameter="{Binding Category}" Content="Save category" Padding="8" Margin="40, 20" />
-            <Label Content="{Binding MessageAfterSave}"/>
+            <TextBlock Text="{Binding MessageAfterSave}" TextWrapping="Wrap"/>
 
         </StackPanel>
 
