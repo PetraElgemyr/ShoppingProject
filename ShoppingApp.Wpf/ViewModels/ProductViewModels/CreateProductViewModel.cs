@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
+using ShoppingApp.Resources.Enums;
 using ShoppingApp.Resources.Models;
 using ShoppingApp.Resources.Services;
 using ShoppingApp.Wpf.ViewModels.CategoryViewModels;
@@ -18,7 +19,8 @@ public partial class CreateProductViewModel : ObservableObject
 
 
     [ObservableProperty]
-    private Product _product;
+    private Product _product = new();
+
 
     [ObservableProperty]
     private ObservableCollection<Category> _categories = [];
@@ -28,38 +30,50 @@ public partial class CreateProductViewModel : ObservableObject
         _productService = productService;
         _categoryService = categoryService;
         _currentContextService = currentContextService;
-        _product = _currentContextService.GetSelectedProduct();
+
+        if (_productService.GetOneProductById(_product.Id).Succeeded != Status.Success)
+        {
+            // om produkten ej är skapad i filen ännu, hämta valt categoriID från context
+            var categoryIdFromContext = _currentContextService.GetSelectedCategoryId();
+            if (!string.IsNullOrEmpty(categoryIdFromContext))
+            {
+                _product = _currentContextService.GetSelectedProduct();
+                //_product.CategoryId = categoryIdFromContext;
+            }
+            else
+            {
+                _product.CategoryId = "";
+            }
+        }
         GetCategories();
 
     }
 
 
+    [RelayCommand]
     public void GetCategories()
     {
-        try
-        {
-            var response = _categoryService.GetAllCategories();
+        var result = _categoryService.GetAllCategories();
 
-            if (response.Content != null && response.Content.Any())
+        if (result.Content != null && result.Content.Any())
+        {
+            foreach (var c in result.Content)
             {
-                foreach (var category in response.Content)
-                {
-                    Categories.Add(category);
-                }
+                Categories.Add(c);
             }
         }
-        catch (Exception)
-        {
-
-        }
-
     }
+
 
 
 
     [RelayCommand]
     public void GoToAddNewCategory()
     {
+        // vid varje navigering till annan sida, RENSA!
+        _currentContextService.SetSelectedProduct(new Product());
+        _currentContextService.SetSelectedCategoryId("");
+
         var mainViewModel = _serviceProvider.GetRequiredService<MainWindowViewModel>();
         mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<CreateCategoryViewModel>();
     }
@@ -67,6 +81,8 @@ public partial class CreateProductViewModel : ObservableObject
     [RelayCommand]
     public void GoToProductOverview()
     {
+        _currentContextService.SetSelectedProduct(new Product());
+        _currentContextService.SetSelectedCategoryId("");
         var mainViewModel = _serviceProvider.GetRequiredService<MainWindowViewModel>();
         mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<ProductOverviewViewModel>();
     }
@@ -80,6 +96,7 @@ public partial class CreateProductViewModel : ObservableObject
             if (!string.IsNullOrEmpty(id))
             {
                 Product.CategoryId = id;
+                _currentContextService.SetSelectedCategoryId(id);
                 _currentContextService.SetSelectedProduct(Product);
 
                 // sätt om, dvs "uppdatera" viewmodelen för att visa uppdaterade categoryId
@@ -102,9 +119,11 @@ public partial class CreateProductViewModel : ObservableObject
             {
                 _productService.CreateAndAddProductToList(product);
 
-                // måste tömma och nollställa min produkt
+                // måste tömma och nollställa min produkt samt valt category id
                 Product = new Product();
                 _currentContextService.SetSelectedProduct(Product);
+                _currentContextService.SetSelectedCategoryId("");
+
             }
         }
         catch (Exception)

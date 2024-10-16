@@ -20,7 +20,7 @@ public partial class UpdateProductViewModel: ObservableObject
     private Product _currentProduct;
 
     [ObservableProperty]
-    private ObservableCollection<Category> _categeories = [];
+    private ObservableCollection<Category> _categories = [];
 
 
     [ObservableProperty]
@@ -66,7 +66,7 @@ public partial class UpdateProductViewModel: ObservableObject
         {
             foreach (var c in result.Content)
             {
-                Categeories.Add(c);
+                Categories.Add(c);
             }
         }
     }

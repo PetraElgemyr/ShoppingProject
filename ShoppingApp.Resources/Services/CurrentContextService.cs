@@ -7,6 +7,17 @@ public class CurrentContextService
 
     private Product _product = new();
     private Category _category = new();
+    private string _categoryId = "";
+
+    public void SetSelectedCategoryId(string categoryId)
+    {
+        _categoryId = categoryId;
+    }
+
+    public string GetSelectedCategoryId()
+    {
+        return _categoryId;
+    }
 
     public void SetSelectedProduct (Product product)
     {
