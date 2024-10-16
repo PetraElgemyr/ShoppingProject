@@ -23,8 +23,8 @@
         </StackPanel>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Content="Show all products" Command="{Binding GoToProductOverviewCommand}" VerticalAlignment="Center" Margin="0,0,20,10"  Padding="10" Width="auto"  />
-            <Button Content="Add new category"  Command="{Binding GoToCreateCategoryCommand}" VerticalAlignment="Center"  Margin="0,0,20,10"  Padding="10" Width="auto" />
+            <Button Content="SHOW PRODUCTS" Command="{Binding GoToProductOverviewCommand}" VerticalAlignment="Center" Margin="0,0,20,10"  Padding="10" Width="auto"  />
+            <Button Content="ADD NEW CATEGORY"  Command="{Binding GoToCreateCategoryCommand}" VerticalAlignment="Center"  Margin="0,0,20,10"  Padding="10" Width="auto" />
         </StackPanel>
 
         <StackPanel Grid.Row="2" >

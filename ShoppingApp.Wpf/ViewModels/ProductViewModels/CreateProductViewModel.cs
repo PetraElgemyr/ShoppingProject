@@ -72,14 +72,14 @@ public partial class CreateProductViewModel : ObservableObject
 
 
     [RelayCommand]
-    public void GoToAddNewCategory()
+    public void GoToCategoryOverview()
     {
         // vid varje navigering till annan sida, RENSA!
         _currentContextService.SetSelectedProduct(new Product());
         _currentContextService.SetSelectedCategoryId("");
 
         var mainViewModel = _serviceProvider.GetRequiredService<MainWindowViewModel>();
-        mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<CreateCategoryViewModel>();
+        mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<CategoryOverviewViewModel>();
     }
 
     [RelayCommand]
