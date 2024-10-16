@@ -27,7 +27,7 @@ public class CategoryService : ICategoryService
 
             if (string.IsNullOrEmpty(categoryRequest.Name) || string.IsNullOrEmpty(categoryRequest.Id))
             {
-                return new RequestResponse<Category> { Succeeded = Status.Failed, Message = $"Could not update because a category name was not provided." };
+                return new RequestResponse<Category> { Succeeded = Status.Failed, Message = $"Could not update because a category name was not provided correctly." };
             }
 
 

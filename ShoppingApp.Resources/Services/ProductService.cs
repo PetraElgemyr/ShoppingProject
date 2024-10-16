@@ -29,9 +29,9 @@ public class ProductService : IProductService
             }
 
 
-            if (string.IsNullOrEmpty(productRequest.Name) || string.IsNullOrEmpty(productRequest.Id) || string.IsNullOrEmpty(productRequest.Price.ToString()))
+            if (string.IsNullOrEmpty(productRequest.Name) || string.IsNullOrEmpty(productRequest.Id) || string.IsNullOrEmpty(productRequest.Price.ToString()) || productRequest.Price <= 0)
             {
-                return new RequestResponse<Product> { Succeeded = Status.Failed, Message = $"Could not update product because all required fields (name and price) was not provided." };
+                return new RequestResponse<Product> { Succeeded = Status.Failed, Message = $"Could not update product because all required fields (name and price) was not provided correctly." };
             }
             _products.Add(productRequest);
 
@@ -97,9 +97,9 @@ public class ProductService : IProductService
         {
 
             // har redan check vid inmatning för pris så att det kan parseas, men dubbelcheck här också på att d inte är tomt eller null. 
-            if (string.IsNullOrEmpty(updatedProduct.Name) || string.IsNullOrEmpty(updatedProduct.Id) || string.IsNullOrEmpty(updatedProduct.Price.ToString()))
+            if (string.IsNullOrEmpty(updatedProduct.Name) || string.IsNullOrEmpty(updatedProduct.Id) || string.IsNullOrEmpty(updatedProduct.Price.ToString()) || updatedProduct.Price <= 0)
             {
-                return new RequestResponse<Product> { Succeeded = Status.Failed, Message = $"Could not update product because all required fields was not provided." };
+                return new RequestResponse<Product> { Succeeded = Status.Failed, Message = $"Could not update product because all required fields was not provided correctly." };
             }
 
             //om det namnet är unikt eller om namnet används på den egna produkten (sigsjälv typ)
