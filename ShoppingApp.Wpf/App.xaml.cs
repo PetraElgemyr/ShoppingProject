@@ -37,10 +37,11 @@ public partial class App : Application
         // Register ViewModels
         services.AddSingleton<MainWindowViewModel>();
 
+        // product viewmodels
         services.AddTransient<ProductOverviewViewModel>();
         services.AddTransient<CreateProductViewModel>();
         services.AddTransient<UpdateProductViewModel>();
-
+        // category viewmodels
         services.AddTransient<CategoryOverviewViewModel>();
         services.AddTransient<CreateCategoryViewModel>();
         services.AddTransient<UpdateCategoryViewModel>();
@@ -48,14 +49,14 @@ public partial class App : Application
         // Register Views
         services.AddSingleton<MainWindow>();
 
+        // product views
         services.AddTransient<ProductOverviewView>();
         services.AddTransient<CreateProductView>();
         services.AddTransient<UpdateProductView>();
-
+        // category views
         services.AddTransient<CategoryOverviewView>();
         services.AddTransient<CreateCategoryView>();
         services.AddTransient<UpdateCategoryView>();
-
     }
 
 

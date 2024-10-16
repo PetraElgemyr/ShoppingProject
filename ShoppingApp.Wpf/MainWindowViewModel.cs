@@ -1,7 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
-using ShoppingApp.Resources.Services;
 using ShoppingApp.Wpf.ViewModels.ProductViewModels;
 
 namespace ShoppingApp.Wpf;
