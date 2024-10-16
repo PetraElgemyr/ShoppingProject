@@ -28,15 +28,20 @@
         </StackPanel>
 
         <StackPanel Grid.Row="2" Margin="0, 10, 0, 0">
-            <Label Content="Note! When deleting a category, all products with that category id will also be removed!" />
+            <Label Margin="5" Content="When deleting a category, all related products will also be removed!" />
             <ListView ItemsSource="{Binding Categories}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding Name}" Margin="5"/>
 
-                            <Button  VerticalAlignment="Center" Margin="0,0,20,0"  Command="{Binding DataContext.GoToUpdateCategoryCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}">
+                            <StackPanel>
+                                <TextBlock Text="{Binding Name}" Margin="10, 10,0,2" FontSize="15"/>
+                                <TextBlock Text="{Binding Id}" Margin="10,0" FontSize="11"/>
+                                <TextBlock Text="{Binding Description}"   Margin="10,0, 0, 10" FontSize="11"/>
+                            </StackPanel>
 
+
+                            <Button  VerticalAlignment="Center" Margin="20,0,10,0" Padding="5" Command="{Binding DataContext.GoToUpdateCategoryCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}">
                                 <Button.Style>
                                     <Style TargetType="Button">
                                         <Setter Property="Background" Value="LightSteelBlue" />
@@ -60,7 +65,7 @@
 
                                 <TextBlock Text="&#x270F;"  />
                             </Button>
-                            <Button  VerticalAlignment="Center" Margin="0,0,20,0" Command="{Binding DataContext.DeleteCategoryCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}">
+                            <Button  VerticalAlignment="Center" Margin="20,0,10,0" Padding="5" Command="{Binding DataContext.DeleteCategoryCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}">
 
                                 <Button.Style>
                                     <Style TargetType="Button">
@@ -90,7 +95,7 @@
                 </ListView.ItemTemplate>
             </ListView>
         </StackPanel>
-        
+
 
     </Grid>
 </UserControl>
