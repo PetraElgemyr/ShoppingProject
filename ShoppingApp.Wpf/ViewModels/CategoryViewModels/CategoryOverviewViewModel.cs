@@ -54,11 +54,6 @@ public partial class CategoryOverviewViewModel : ObservableObject
     [RelayCommand]
     public void GoToUpdateCategory(Category category)
     {
-        if (category == null)
-        {
-            throw new ArgumentException("Category parameter is null");
-        }
-
         _currentContextService.SetSelectedCategory(category);
         var mainViewModel = _serviceProvider.GetRequiredService<MainWindowViewModel>();
         mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<UpdateCategoryViewModel>();
