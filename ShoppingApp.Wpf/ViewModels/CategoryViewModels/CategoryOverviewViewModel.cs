@@ -14,6 +14,7 @@ public partial class CategoryOverviewViewModel : ObservableObject
 
     private readonly IServiceProvider _serviceProvider;
     private readonly CategoryService _categoryService;
+    private readonly CurrentContextService _currentContextService;
     private readonly ProductService _productService;
 
 
@@ -24,11 +25,12 @@ public partial class CategoryOverviewViewModel : ObservableObject
     private Category _category = new();
 
 
-    public CategoryOverviewViewModel(IServiceProvider serviceProvider, CategoryService categoryService, ProductService productService)
+    public CategoryOverviewViewModel(IServiceProvider serviceProvider, CategoryService categoryService, ProductService productService, CurrentContextService currentContextService)
     {
         _serviceProvider = serviceProvider;
         _categoryService = categoryService;
         _productService = productService;
+        _currentContextService = currentContextService;
         GetCategories();
     }
 
@@ -43,13 +45,21 @@ public partial class CategoryOverviewViewModel : ObservableObject
     [RelayCommand]
     public void GoToCreateCategory()
     {
+
+      
         var mainViewModel = _serviceProvider.GetRequiredService<MainWindowViewModel>();
         mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<CreateCategoryViewModel>();
     }
 
     [RelayCommand]
-    public void GoToUpdateCategory()
+    public void GoToUpdateCategory(Category category)
     {
+        if (category == null)
+        {
+            throw new ArgumentException("Category parameter is null");
+        }
+
+        _currentContextService.SetSelectedCategory(category);
         var mainViewModel = _serviceProvider.GetRequiredService<MainWindowViewModel>();
         mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<UpdateCategoryViewModel>();
     }
