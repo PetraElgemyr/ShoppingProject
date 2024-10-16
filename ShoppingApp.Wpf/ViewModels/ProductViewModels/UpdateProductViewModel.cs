@@ -67,6 +67,7 @@ public partial class UpdateProductViewModel: ObservableObject
         }
     }
 
+    // TODO. skapa klickevent på categorierna, som tillsätter currentProduct.CategoryId
 
     [RelayCommand]
     public void UpdateProduct(Product updatedProduct)
@@ -76,13 +77,16 @@ public partial class UpdateProductViewModel: ObservableObject
             if (updatedProduct != null)
             {
                 var result = _productService.UpdateProductById(updatedProduct.Id, updatedProduct);
-                if (result.Succeeded == Status.Success)
+                if (result.Succeeded == Status.Success && !string.IsNullOrEmpty(result.Message))
                 {
-                    MessageAfterSave = "Product was successfully updated!";
+                    MessageAfterSave = result.Message;
+                    _currentContextService.SetSelectedProduct(new Product());
                 }
             }
         }
-        catch (Exception)
-        { }
+        catch (Exception ex)
+        {
+            MessageAfterSave = ex.Message;
+        }
     }
 }
