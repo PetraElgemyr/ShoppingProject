@@ -32,7 +32,7 @@
             <TextBlock Text="Description (optional)" Margin="10, 15, 10, 5"/>
             <TextBox Text="{Binding CurrentCategory.Description}" Margin="10, 0" Padding="5"/>
 
-            <Button Command="{Binding SaveUpdatedCategoryCommand }" CommandParameter="{Binding}" Content="Save category" Padding="8" Margin="40, 20" />
+            <Button Command="{Binding SaveUpdatedCategoryCommand }" CommandParameter="{Binding CurrentCategory}" Content="Save category" Padding="8" Margin="40, 20" />
             <Label Content="{Binding MessageAfterUpdate }"/>
 
         </StackPanel>
