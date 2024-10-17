@@ -19,10 +19,10 @@ public class CategoryService : ICategoryService
     {
         try
         {
-            var categoryWithSameName = _categories.FirstOrDefault(x => x.Name.ToLower() == categoryRequest.Name.ToLower() && x.Id != categoryRequest.Id);
+            var categoryWithSameName = _categories.FirstOrDefault(x => x.Name.ToLower().Trim() == categoryRequest.Name.ToLower().Trim() && x.Id != categoryRequest.Id);
             if (categoryWithSameName != null)
             {
-                return new RequestResponse<Category> { Succeeded = Status.Exists, Message = $"Another category with the name '{categoryRequest.Name}' already exists." };
+                return new RequestResponse<Category> { Succeeded = Status.Exists, Message = $"Another category with the name '{categoryRequest.Name.Trim()}' already exists." };
             }
 
             if (string.IsNullOrEmpty(categoryRequest.Name) || string.IsNullOrEmpty(categoryRequest.Id))
@@ -105,10 +105,10 @@ public class CategoryService : ICategoryService
             }
 
             //om det namnet är unikt eller om namnet ej är unikt då det räknar med sigsjälv (dvs gamla namnet behålls på kategorin)
-            var existingCategory = _categories.FirstOrDefault(x => x.Name.ToLower() == updatedCategory.Name.ToLower() && x.Id != id);
+            var existingCategory = _categories.FirstOrDefault(x => x.Name.ToLower().Trim() == updatedCategory.Name.ToLower().Trim() && x.Id != id);
             if (existingCategory != null)
             {
-                return new RequestResponse<Category> { Succeeded = Status.Exists, Message = $"Category with the name '{updatedCategory.Name}' already exists." };
+                return new RequestResponse<Category> { Succeeded = Status.Exists, Message = $"Category with the name '{updatedCategory.Name.Trim()}' already exists." };
             }
 
             var indexToUpdate = _categories.FindIndex((x) => x.Id == id);

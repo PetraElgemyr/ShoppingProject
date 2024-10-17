@@ -22,10 +22,10 @@ public class ProductService : IProductService
 
         try
         {
-            var existingProduct = _products.FirstOrDefault(x => x.Name.ToLower() == productRequest.Name.ToLower() && x.Id != productRequest.Id);
+            var existingProduct = _products.FirstOrDefault(x => x.Name.ToLower().Trim() == productRequest.Name.ToLower().Trim() && x.Id != productRequest.Id);
             if (existingProduct != null)
             {
-                return new RequestResponse<Product> { Succeeded = Status.Exists, Message = $"Another Product with the name '{productRequest.Name}' already exists." };
+                return new RequestResponse<Product> { Succeeded = Status.Exists, Message = $"Another Product with the name '{productRequest.Name.Trim()}' already exists." };
             }
 
 
@@ -103,10 +103,10 @@ public class ProductService : IProductService
             }
 
             //om det namnet är unikt eller om namnet används på den egna produkten (sigsjälv typ)
-            var existingProduct = _products.FirstOrDefault(x => x.Name.ToLower() == updatedProduct.Name.ToLower() && x.Id != id);
+            var existingProduct = _products.FirstOrDefault(x => x.Name.ToLower().Trim() == updatedProduct.Name.ToLower().Trim() && x.Id != id);
             if (existingProduct != null)
             {
-                return new RequestResponse<Product> { Succeeded = Status.Exists, Message = $"Product with the name '{updatedProduct.Name}' already exists." };
+                return new RequestResponse<Product> { Succeeded = Status.Exists, Message = $"Product with the name '{updatedProduct.Name.Trim()}' already exists." };
             }
 
             var indexToUpdate = _products.FindIndex((x) => x.Id == id);
