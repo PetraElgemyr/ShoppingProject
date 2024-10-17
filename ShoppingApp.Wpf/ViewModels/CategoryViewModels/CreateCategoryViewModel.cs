@@ -59,18 +59,13 @@ public partial class CreateCategoryViewModel : ObservableObject
 
             if (response.Succeeded == Status.Success)
             {
-                MessageAfterSave = "Category was successfully saved";
+                // töm category i mitt "context"
+                _currentContextService.SetSelectedCategory(new Category());
             }
-            else if (response.Succeeded == Status.SuccessWithErrors && !string.IsNullOrEmpty(response.Message))
-            {
-                MessageAfterSave = response.Message;
-            } else
-            {
-                MessageAfterSave = "Oops! Something went wrong.";
-            }
+            MessageAfterSave = response.Message ?? "";
         }
         catch (Exception)
-        {}
+        { }
 
     }
 }
