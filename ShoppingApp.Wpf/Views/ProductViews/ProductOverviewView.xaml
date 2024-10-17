@@ -5,9 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ShoppingApp.Wpf.Views.ProductViews"
              mc:Ignorable="d" 
-             d:DesignHeight="700" d:DesignWidth="400"
              xmlns:viewmodel="clr-namespace:ShoppingApp.Wpf.ViewModels.ProductViewModels"
              d:DataContext="{d:DesignInstance Type=viewmodel:ProductOverviewViewModel}"
+             
              >
     <Grid Height="auto">
 
@@ -22,8 +22,8 @@
         </StackPanel>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Content="SHOW CATEGORIES" Command="{Binding GoToCategoryOverviewCommand}" VerticalAlignment="Center" Margin="0,0,20,10"  Padding="10" Width="auto"  />
-            <Button Content="ADD NEW PRODUCT"  Command="{Binding GoToAddProductCommand}" Width="auto" Padding="10" Margin="0,0,0,10" />
+            <Button Content="SHOW CATEGORIES" Command="{Binding GoToCategoryOverviewCommand}" Background="Tan" VerticalAlignment="Center" Margin="0,0,20,10"  Padding="10" Width="auto"  />
+            <Button Content="ADD NEW PRODUCT"  Command="{Binding GoToAddProductCommand}"   Background="LightSlateGray"  Width="auto" Padding="10" Margin="0,0,0,10" />
         </StackPanel>
 
         <StackPanel Grid.Row="2">
@@ -50,12 +50,12 @@
                                 <TextBlock Text="{Binding Id}" Margin="10, 0" FontSize="10"/>
                                 <TextBlock Text="{Binding Description}" Margin="10, 0, 0, 5" FontSize="12" TextWrapping="Wrap"/>
 
-                              
+
                             </StackPanel>
 
-                            
-                            
-                            
+
+
+
                             <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
 
                                 <Button  VerticalAlignment="Center" Margin="20,0,10,0" Padding="5"  Command="{Binding DataContext.GoToUpdateProductCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}">
@@ -112,7 +112,7 @@
                         </Grid>
 
 
-                            
+
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>

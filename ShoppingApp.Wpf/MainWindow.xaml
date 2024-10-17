@@ -5,9 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ShoppingApp.Wpf"
         mc:Ignorable="d"
-        Title="Startsida" Height="700" Width="400"
+        Title="Startsida" Height="auto" Width="auto"
         WindowStartupLocation="CenterScreen"
         d:DataContext="{d:DesignInstance Type=local:MainWindowViewModel}"
+        SizeToContent="WidthAndHeight"
         >
     <Grid>
         <ContentControl Content="{Binding CurrentViewModel}"/>

@@ -5,7 +5,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ShoppingApp.Wpf.Views.CategoryViews"
              mc:Ignorable="d" 
-             d:DesignHeight="700" d:DesignWidth="400"
              xmlns:viewmodels="clr-namespace:ShoppingApp.Wpf.ViewModels.CategoryViewModels"
              d:DataContext="{d:DesignInstance Type=viewmodels:CategoryOverviewViewModel}"
             
@@ -23,8 +22,8 @@
         </StackPanel>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Content="SHOW PRODUCTS" Command="{Binding GoToProductOverviewCommand}" VerticalAlignment="Center" Margin="0,0,20,10"  Padding="10" Width="auto"  />
-            <Button Content="ADD NEW CATEGORY"  Command="{Binding GoToCreateCategoryCommand}" VerticalAlignment="Center"  Margin="0,0,20,10"  Padding="10" Width="auto" />
+            <Button Content="SHOW PRODUCTS" Command="{Binding GoToProductOverviewCommand}" Background="LightSlateGray"  VerticalAlignment="Center" Margin="0,0,20,10"  Padding="10" Width="auto"  />
+            <Button Content="ADD NEW CATEGORY"  Command="{Binding GoToCreateCategoryCommand}" Background="Tan"  VerticalAlignment="Center"  Margin="0,0,20,10"  Padding="10" Width="auto" />
         </StackPanel>
 
         <StackPanel Grid.Row="2" >
