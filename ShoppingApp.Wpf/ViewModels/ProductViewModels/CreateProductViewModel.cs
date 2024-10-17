@@ -121,6 +121,13 @@ public partial class CreateProductViewModel : ObservableObject
         {
             if (product != null)
             {
+
+                if (!decimal.TryParse(product.Price.ToString(), out decimal price))
+                {
+                    MessageAfterSave = "Price must be a number.";
+                    return;
+                }
+
                 var result = _productService.CreateAndAddProductToList(product);
 
                 if (result.Succeeded == Status.Success)
