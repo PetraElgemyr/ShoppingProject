@@ -17,6 +17,8 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+
         </Grid.RowDefinitions>
 
 
@@ -25,11 +27,32 @@
         </StackPanel>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Content="SHOW PRODUCTS" Command="{Binding GoToProductOverviewCommand}"  Background="LightSlateGray"  VerticalAlignment="Center" Margin="0,0,20,10"  Padding="10" Width="auto"  />
-            <Button Content="SHOW CATEGORIES" Command="{Binding GoToCategoryOverviewCommand}" Background="Tan" VerticalAlignment="Center" Margin="0,0,0,10"  Padding="10" Width="auto"  />
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
+            </Grid>
+
+            <Button Grid.Column="0" Content="SHOW CATEGORIES" Command="{Binding GoToCategoryOverviewCommand}" Background="Tan" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="10" Padding="10" Width="auto"  />
+            <Button Grid.Column="1" Content="SHOW PRODUCTS" Command="{Binding GoToProductOverviewCommand}" Background="LightSlateGray" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="10"  Padding="10" Width="auto"  />
+
         </StackPanel>
 
-        <StackPanel Grid.Row="2" Margin="10, 10"  Background="LightGray" >
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
+            </Grid>
+
+            <Button Grid.Column="0" Content="ADD NEW CATEGORY" Command="{Binding GoToCreateCategoryCommand}" Background="Tan" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="10" Padding="10" Width="auto"  />
+            <Button Grid.Column="1" Content="ADD NEW PRODUCT"  Command="{Binding GoToAddProductCommand}"   Background="LightSlateGray"  Width="auto" Padding="10" HorizontalAlignment="Stretch" Margin="10"/>
+        </StackPanel>
+
+
+        <StackPanel Grid.Row="3" Margin="10, 10"  Background="LightGray" >
             <TextBlock Text="Product name (required)"  Margin="10, 15, 10, 5"/>
             <TextBox Text="{Binding CurrentProduct.Name}" Margin="10, 0" Padding="5"/>
 
@@ -57,7 +80,7 @@
                 </ListView.ItemTemplate>
             </ListView>
 
-            <Button Command="{Binding UpdateProductCommand}" CommandParameter="{Binding CurrentProduct}" Content="Save product" Padding="8" Margin="40, 20" />
+            <Button Command="{Binding UpdateProductCommand}" Content="Update product" Padding="8" Margin="40, 20" />
             <TextBlock Text="{Binding MessageAfterSave}"  TextWrapping="Wrap"/>
         </StackPanel>
 

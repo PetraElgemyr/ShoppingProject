@@ -19,8 +19,8 @@ public partial class ProductOverviewViewModel : ObservableObject
     [ObservableProperty]
     private ObservableCollection<Product> _products = [];
 
-    [ObservableProperty]
-    private Product _product = new Product();
+    //[ObservableProperty]
+    //private Product _product = new Product();
 
     public ProductOverviewViewModel(IServiceProvider serviceProvider, ProductService productService, CurrentContextService currentContextService)
     {
@@ -35,6 +35,21 @@ public partial class ProductOverviewViewModel : ObservableObject
     {
         var mainViewModel = _serviceProvider.GetRequiredService<MainWindowViewModel>();
         mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<CategoryOverviewViewModel>();
+    }
+
+    [RelayCommand]
+    public void GoToProductOverview()
+    {
+        var mainViewModel = _serviceProvider.GetRequiredService<MainWindowViewModel>();
+        mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<ProductOverviewViewModel>();
+    }
+
+
+    [RelayCommand]
+    public void GoToCreateCategory()
+    {
+        var mainViewModel = _serviceProvider.GetRequiredService<MainWindowViewModel>();
+        mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<CreateCategoryViewModel>();
     }
 
 
@@ -54,9 +69,6 @@ public partial class ProductOverviewViewModel : ObservableObject
     }
 
  
-
-
-
 
     [RelayCommand]
     public void DeleteProduct(Product productToDelete)

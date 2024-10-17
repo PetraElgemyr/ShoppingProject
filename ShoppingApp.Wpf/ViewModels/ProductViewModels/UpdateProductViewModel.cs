@@ -57,6 +57,24 @@ public partial class UpdateProductViewModel: ObservableObject
         mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<CategoryOverviewViewModel>();
     }
 
+
+    [RelayCommand]
+    public void GoToCreateCategory()
+    {
+        _currentContextService.SetSelectedCategory(new Category());
+        var mainViewModel = _serviceProvider.GetRequiredService<MainWindowViewModel>();
+        mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<CreateCategoryViewModel>();
+    }
+
+
+    [RelayCommand]
+    public void GoToAddProduct()
+    {
+        var mainViewModel = _serviceProvider.GetRequiredService<MainWindowViewModel>();
+        mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<CreateProductViewModel>();
+    }
+
+
     [RelayCommand]
     public void GetCategories()
     {
@@ -97,20 +115,20 @@ public partial class UpdateProductViewModel: ObservableObject
     }
 
     [RelayCommand]
-    public void UpdateProduct(Product updatedProduct)
+    public void UpdateProduct()
     {
         try
         {
-            if (updatedProduct != null)
+            if (CurrentProduct != null)
             {
 
-                if (!decimal.TryParse(updatedProduct.Price.ToString(), out decimal price))
+                if (!decimal.TryParse(CurrentProduct.Price.ToString(), out decimal price))
                 {
                     MessageAfterSave = "Price must be a number.";
                     return;
                 }
 
-                var result = _productService.UpdateProductById(updatedProduct.Id, updatedProduct);
+                var result = _productService.UpdateProductById(CurrentProduct.Id, CurrentProduct);
                 if (result.Succeeded == Status.Success)
                 {
                     // nollställ produkten och valt catId i contextet, EJ currentProduct

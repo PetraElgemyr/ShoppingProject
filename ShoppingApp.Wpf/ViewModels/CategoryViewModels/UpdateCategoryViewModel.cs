@@ -45,15 +45,30 @@ public partial class UpdateCategoryViewModel : ObservableObject
         mainWindow.CurrentViewModel = _serviceProvider.GetRequiredService<ProductOverviewViewModel>();
     }
 
+    [RelayCommand]
+    public void GoToCreateCategory()
+    {
+        var mainViewModel = _serviceProvider.GetRequiredService<MainWindowViewModel>();
+        mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<CreateCategoryViewModel>();
+    }
+
 
     [RelayCommand]
-    public void SaveUpdatedCategory(Category category)
+    public void GoToAddProduct()
+    {
+        var mainViewModel = _serviceProvider.GetRequiredService<MainWindowViewModel>();
+        mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<CreateProductViewModel>();
+    }
+
+
+    [RelayCommand]
+    public void SaveUpdatedCategory()
     {
         try
         {
-            if (category != null)
+            if (CurrentCategory != null)
             {
-               var result = _categoryService.UpdateCategoryById(category.Id, category);
+               var result = _categoryService.UpdateCategoryById(CurrentCategory.Id, CurrentCategory);
                 
                 if(result.Succeeded == Status.Success && !string.IsNullOrEmpty(result.Message))
                 {

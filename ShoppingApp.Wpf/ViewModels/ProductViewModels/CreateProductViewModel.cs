@@ -75,8 +75,7 @@ public partial class CreateProductViewModel : ObservableObject
     public void GoToCategoryOverview()
     {
         // vid varje navigering till annan sida, RENSA!
-        _currentContextService.SetSelectedProduct(new Product());
-        _currentContextService.SetSelectedCategoryId("");
+        ClearSelectedObjectsInContext();
 
         var mainViewModel = _serviceProvider.GetRequiredService<MainWindowViewModel>();
         mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<CategoryOverviewViewModel>();
@@ -85,10 +84,33 @@ public partial class CreateProductViewModel : ObservableObject
     [RelayCommand]
     public void GoToProductOverview()
     {
+        ClearSelectedObjectsInContext();
+         var mainViewModel = _serviceProvider.GetRequiredService<MainWindowViewModel>();
+        mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<ProductOverviewViewModel>();
+    }
+
+
+    [RelayCommand]
+    public void GoToCreateCategory()
+    {
+        _currentContextService.SetSelectedCategory(new Category());
+        var mainViewModel = _serviceProvider.GetRequiredService<MainWindowViewModel>();
+        mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<CreateCategoryViewModel>();
+    }
+
+
+    [RelayCommand]
+    public void GoToAddProduct()
+    {
+        var mainViewModel = _serviceProvider.GetRequiredService<MainWindowViewModel>();
+        mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<CreateProductViewModel>();
+    }
+
+
+    public void ClearSelectedObjectsInContext()
+    {
         _currentContextService.SetSelectedProduct(new Product());
         _currentContextService.SetSelectedCategoryId("");
-        var mainViewModel = _serviceProvider.GetRequiredService<MainWindowViewModel>();
-        mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<ProductOverviewViewModel>();
     }
 
 
@@ -115,20 +137,20 @@ public partial class CreateProductViewModel : ObservableObject
 
 
     [RelayCommand]
-    public void SaveProduct(Product product)
+    public void SaveProduct()
     {
         try
         {
-            if (product != null)
+            if (Product != null)
             {
 
-                if (!decimal.TryParse(product.Price.ToString(), out decimal price))
+                if (!decimal.TryParse(Product.Price.ToString(), out decimal price))
                 {
                     MessageAfterSave = "Price must be a number.";
                     return;
                 }
 
-                var result = _productService.CreateAndAddProductToList(product);
+                var result = _productService.CreateAndAddProductToList(Product);
 
                 if (result.Succeeded == Status.Success)
                 {

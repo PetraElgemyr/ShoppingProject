@@ -14,6 +14,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
@@ -22,11 +23,34 @@
         </StackPanel>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Content="SHOW CATEGORIES" Command="{Binding GoToCategoryOverviewCommand}" Background="Tan" VerticalAlignment="Center" Margin="0,0,20,10"  Padding="10" Width="auto"  />
-            <Button Content="ADD NEW PRODUCT"  Command="{Binding GoToAddProductCommand}"   Background="LightSlateGray"  Width="auto" Padding="10" Margin="0,0,0,10" />
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
+            </Grid>
+
+            <Button Grid.Column="0" Content="SHOW CATEGORIES" Command="{Binding GoToCategoryOverviewCommand}" Background="Tan" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="10" Padding="10" Width="auto"  />
+            <Button Grid.Column="1" Content="SHOW PRODUCTS" Command="{Binding GoToProductOverviewCommand}" Background="LightSlateGray" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="10"  Padding="10" Width="auto"  />
+
         </StackPanel>
 
-        <StackPanel Grid.Row="2">
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
+            </Grid>
+
+            <Button Grid.Column="0" Content="ADD NEW CATEGORY" Command="{Binding GoToCreateCategoryCommand}" Background="Tan" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="10" Padding="10" Width="auto"  />
+            <Button Grid.Column="1" Content="ADD NEW PRODUCT"  Command="{Binding GoToAddProductCommand}"   Background="LightSlateGray"  Width="auto" Padding="10" HorizontalAlignment="Stretch" Margin="10"/>
+        </StackPanel>
+
+
+
+
+            <StackPanel Grid.Row="3">
             <ListView ItemsSource="{Binding Products}">
                 <ListView.ItemTemplate>
                     <DataTemplate>

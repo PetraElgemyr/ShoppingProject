@@ -43,13 +43,28 @@ public partial class CategoryOverviewViewModel : ObservableObject
     }
 
     [RelayCommand]
+    public void GoToCategoryOverview()
+    {
+        var mainViewModel = _serviceProvider.GetRequiredService<MainWindowViewModel>();
+        mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<CategoryOverviewViewModel>();
+    }
+
+
+    [RelayCommand]
     public void GoToCreateCategory()
     {
-
-      
         var mainViewModel = _serviceProvider.GetRequiredService<MainWindowViewModel>();
         mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<CreateCategoryViewModel>();
     }
+
+
+    [RelayCommand]
+    public void GoToAddProduct()
+    {
+        var mainViewModel = _serviceProvider.GetRequiredService<MainWindowViewModel>();
+        mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<CreateProductViewModel>();
+    }
+
 
     [RelayCommand]
     public void GoToUpdateCategory(Category category)

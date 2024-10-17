@@ -49,20 +49,41 @@ public partial class CreateCategoryViewModel : ObservableObject
         mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<ProductOverviewViewModel>();
     }
 
+    [RelayCommand]
+    public void GoToCreateCategory()
+    {
+        var mainViewModel = _serviceProvider.GetRequiredService<MainWindowViewModel>();
+        mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<CreateCategoryViewModel>();
+    }
+
 
     [RelayCommand]
-    public void SaveCategory(Category category)
+    public void GoToAddProduct()
+    {
+        var mainViewModel = _serviceProvider.GetRequiredService<MainWindowViewModel>();
+        mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<CreateProductViewModel>();
+    }
+
+
+    [RelayCommand]
+    public void SaveCategory()
     {
         try
         {
-            var response = _categoryService.CreateAndAddCategoryToList(category);
 
-            if (response.Succeeded == Status.Success)
+            if (Category != null)
             {
-                // töm category i mitt "context"
-                _currentContextService.SetSelectedCategory(new Category());
+                var response = _categoryService.CreateAndAddCategoryToList(Category);
+
+                if (response.Succeeded == Status.Success)
+                {
+                    // töm category i mitt "context"
+                    _currentContextService.SetSelectedCategory(new Category());
+                }
+                MessageAfterSave = response.Message ?? "";
+
             }
-            MessageAfterSave = response.Message ?? "";
+
         }
         catch (Exception)
         { }
