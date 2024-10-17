@@ -103,16 +103,20 @@ public class ProductService : IProductService
             }
 
             //om det namnet är unikt eller om namnet används på den egna produkten (sigsjälv typ)
-            var existingProduct = _products.FirstOrDefault(x => x.Name.ToLower().Trim() == updatedProduct.Name.ToLower().Trim() && x.Id != id);
-            if (existingProduct != null)
+            var existingProductWithAnotherId = _products.FirstOrDefault(x => x.Name.ToLower().Trim() == updatedProduct.Name.ToLower().Trim() && x.Id != id);
+            if (existingProductWithAnotherId != null)
             {
                 return new RequestResponse<Product> { Succeeded = Status.Exists, Message = $"Product with the name '{updatedProduct.Name.Trim()}' already exists." };
             }
 
-            var indexToUpdate = _products.FindIndex((x) => x.Id == id);
-            if (indexToUpdate > -1)
+
+            var existingSameProduct = _products.FirstOrDefault(x => x.Id == id);
+
+            if (existingSameProduct != null)
             {
-                _products[indexToUpdate] = updatedProduct;
+                existingSameProduct.Name = updatedProduct.Name;
+                existingSameProduct.Price = updatedProduct.Price;
+                existingSameProduct.Description = updatedProduct.Description;
                 var updatedProductsAsString = JsonConvert.SerializeObject(_products);
                 var RequestResponse = _fileService.SaveToFile(updatedProductsAsString);
 
@@ -124,11 +128,14 @@ public class ProductService : IProductService
                 {
                     return new RequestResponse<Product> { Succeeded = Status.SuccessWithErrors, Message = "Oops! Product was updated in the list but the list could not be saved to file." };
                 }
+
             }
             else
             {
                 return new RequestResponse<Product> { Succeeded = Status.NotFound, Message = "The product was not found and could not be updated." };
+
             }
+
         }
         catch (Exception ex)
         {
@@ -174,7 +181,7 @@ public class ProductService : IProductService
 
 
 
-    
+
 
     public RequestResponse<Product> DeleteProductsWithSpecificCategoryId(string categoryId)
     {
