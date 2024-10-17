@@ -105,22 +105,18 @@ public class CategoryService : ICategoryService
             }
 
             //om det namnet är unikt eller om namnet ej är unikt då det räknar med sigsjälv (dvs gamla namnet behålls på kategorin)
-            var existingCategory = _categories.FirstOrDefault(x => x.Name.ToLower().Trim() == updatedCategory.Name.ToLower().Trim() && x.Id != id);
-            if (existingCategory != null)
+            var existingCategoryWithAnotherId = _categories.FirstOrDefault(x => x.Name.ToLower().Trim() == updatedCategory.Name.ToLower().Trim() && x.Id != id);
+            if (existingCategoryWithAnotherId != null)
             {
                 return new RequestResponse<Category> { Succeeded = Status.Exists, Message = $"Category with the name '{updatedCategory.Name.Trim()}' already exists." };
             }
-
-            var indexToUpdate = _categories.FindIndex((x) => x.Id == id);
-            if (indexToUpdate > -1)
+        
+            var existingSameCategory = _categories.FirstOrDefault(x => x.Id == id);
+            if (existingSameCategory != null)
             {
-                _categories[indexToUpdate] = updatedCategory;
-
-                // samma sak men lite "snyggare" kanske?? TODO: kanske ändra senare
-                //_categories[indexToUpdate].Name = updatedCategory.Name;
-                //_categories[indexToUpdate].Description = updatedCategory.Description;
-
-
+                existingSameCategory.Name = updatedCategory.Name;
+                existingSameCategory.Description = updatedCategory.Description;
+                
                 var updatedCategoriesAsString = JsonConvert.SerializeObject(_categories);
                 var RequestResponse = _fileService.SaveToFile(updatedCategoriesAsString);
 
@@ -132,6 +128,7 @@ public class CategoryService : ICategoryService
                 {
                     return new RequestResponse<Category> { Succeeded = Status.SuccessWithErrors, Message = "Category was updated but something went wrong when saving the list to file." };
                 }
+
             }
             else
             {
