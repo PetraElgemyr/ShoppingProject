@@ -103,6 +103,13 @@ public partial class UpdateProductViewModel: ObservableObject
         {
             if (updatedProduct != null)
             {
+
+                if (!decimal.TryParse(updatedProduct.Price.ToString(), out decimal price))
+                {
+                    MessageAfterSave = "Price must be a number.";
+                    return;
+                }
+
                 var result = _productService.UpdateProductById(updatedProduct.Id, updatedProduct);
                 if (result.Succeeded == Status.Success)
                 {
