@@ -178,8 +178,6 @@ public class ProductService : IProductService
 
     public RequestResponse<Product> DeleteProductsWithSpecificCategoryId(string categoryId)
     {
-        // TODO. om orkar. ska triggas när kategori blivit raderad. Då ta bort produkter med det categoriIDt.
-    // Annars blir det weird vid visning av cat-name för prods
         try
         {
             if (String.IsNullOrEmpty(categoryId))

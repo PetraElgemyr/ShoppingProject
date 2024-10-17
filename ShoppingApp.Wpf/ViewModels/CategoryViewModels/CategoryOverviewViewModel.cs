@@ -117,7 +117,6 @@ public partial class CategoryOverviewViewModel : ObservableObject
             if (categoryRequestResult.Succeeded == Status.Success)
             {
                 _productService.DeleteProductsWithSpecificCategoryId(category.Id);
-                // TODO: när man raderar kategori, radera alla produkter som har den kategorin, därav behövs prod service
                 GetCategories();
             }
         }

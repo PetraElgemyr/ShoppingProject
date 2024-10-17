@@ -73,7 +73,6 @@ public partial class UpdateProductViewModel: ObservableObject
 
 
 
-    // TODO. skapa klickevent på categorierna, som tillsätter currentProduct.CategoryId
     [RelayCommand]
     public void UpdateCategoryIdForCurrentProduct(string id)
     {
