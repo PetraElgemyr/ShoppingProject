@@ -21,8 +21,12 @@ public abstract class FileService : IFileService
             {
                 using var sr = new StreamReader(_filePath);
                 var content = sr.ReadToEnd();
+
+                if(content != null)
+                {
                 return new RequestResponse<string> { Succeeded = Status.Success, Content = content };
 
+                }
             }
             else
             {
@@ -36,6 +40,7 @@ public abstract class FileService : IFileService
         {
             return new RequestResponse<string> { Succeeded = Status.Failed, Message = $"{ex.Message}" };
         }
+        return default!;
     }
     public RequestResponse<string> SaveToFile(string content)
     {
