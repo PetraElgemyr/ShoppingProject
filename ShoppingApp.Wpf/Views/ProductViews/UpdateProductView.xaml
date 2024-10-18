@@ -74,7 +74,7 @@
                                 <TextBlock Text="{Binding Name}" Margin="5"/>
                             <TextBlock Text="{Binding Id}" Margin="5"/>
                             </StackPanel>
-                            <Button Content="Select" Command="{Binding DataContext.UpdateCategoryIdForCurrentProductCommand, RelativeSource={RelativeSource AncestorType=ListView}}" CommandParameter="{Binding Id}" />
+                            <Button Content="Select" Command="{Binding DataContext.UpdateCategoryIdForCurrentProductCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding Id}" />
                         </StackPanel>
                     </DataTemplate>
                 </ListView.ItemTemplate>

@@ -42,7 +42,6 @@ public partial class CreateProductViewModel : ObservableObject
             if (!string.IsNullOrEmpty(categoryIdFromContext))
             {
                 _product = _currentContextService.GetSelectedProduct();
-                //_product.CategoryId = categoryIdFromContext;
             }
             else
             {
@@ -121,13 +120,16 @@ public partial class CreateProductViewModel : ObservableObject
         {
             if (!string.IsNullOrEmpty(id))
             {
+
+
                 Product.CategoryId = id;
                 _currentContextService.SetSelectedCategoryId(id);
                 _currentContextService.SetSelectedProduct(Product);
 
                 // sätt om, dvs "uppdatera" viewmodelen för att visa uppdaterade categoryId
                 var mainViewModel = _serviceProvider.GetRequiredService<MainWindowViewModel>();
-                mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<CreateProductViewModel>();
+                    mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<CreateProductViewModel>();
+            
             }
         }
         catch (Exception)
@@ -143,6 +145,13 @@ public partial class CreateProductViewModel : ObservableObject
         {
             if (Product != null)
             {
+
+                if (!Categories.Any(x => x.Id == Product.Id))
+                {
+                    MessageAfterSave = "Category ID does not exist.";
+                    return;
+                }
+
 
                 if (!decimal.TryParse(Product.Price.ToString(), out decimal price))
                 {
