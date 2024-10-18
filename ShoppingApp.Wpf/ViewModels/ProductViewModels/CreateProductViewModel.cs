@@ -146,7 +146,7 @@ public partial class CreateProductViewModel : ObservableObject
             if (Product != null)
             {
 
-                if (!Categories.Any(x => x.Id == Product.Id))
+                if (!Categories.Any(x => x.Id == Product.CategoryId))
                 {
                     MessageAfterSave = "Category ID does not exist.";
                     return;

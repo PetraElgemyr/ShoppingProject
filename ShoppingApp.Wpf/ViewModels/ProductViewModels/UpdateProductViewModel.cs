@@ -122,6 +122,13 @@ public partial class UpdateProductViewModel: ObservableObject
             if (CurrentProduct != null)
             {
 
+
+                if (!Categories.Any(x => x.Id == CurrentProduct.CategoryId))
+                {
+                    MessageAfterSave = "Category ID does not exist.";
+                    return;
+                }
+
                 if (!decimal.TryParse(CurrentProduct.Price.ToString(), out decimal price))
                 {
                     MessageAfterSave = "Price must be a number.";
